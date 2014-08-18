@@ -1,0 +1,2 @@
+WIN下暂时需要环境变量：MYIM_HOME
+做为程序编译的DESTDIR
