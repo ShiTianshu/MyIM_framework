@@ -14,17 +14,11 @@ LIBS += -L $$(MYIM_HOME)/lib -lMyBase
 DEFINES += MYCORE_LIBRARY
 
 SOURCES += mycore.cpp \
-    myengine.cpp \
-    actmanager.cpp \
-    procmanager.cpp \
-    srcmanager.cpp
+    myengine.cpp
 
 HEADERS += mycore.h\
         mycore_global.h \
-    myengine.h \
-    actmanager.h \
-    procmanager.h \
-    srcmanager.h
+    myengine.h
 
 unix {
     target.path = /usr/lib

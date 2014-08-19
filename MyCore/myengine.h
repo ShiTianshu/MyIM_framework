@@ -7,15 +7,10 @@
 #include <QVector>
 #include <QObject>
 
-#include "procmanager.h"
-#include "actmanager.h"
-#include "srcmanager.h"
+#include "../MyBase/iproc.h"
 
 class MyEngine:
-        public QObject,
-        public ProcManager,
-        public ActManager,
-        public SrcManager
+        public QObject
 {
 
     Q_OBJECT
@@ -30,9 +25,24 @@ public:
     void addKeyUpProcList(QStringList procList);
     void addFocusInProcList(QStringList procList);
     void addFocusOutProcList(QStringList procList);
+
+    void onKeyDown();
+    void onKeyUp();
+    void onFocusIn();
+    void onFocusOut();
+
 private:
     QString name;
     QMap< QString, IMod* > mods;
+    QVector< IProc* > keyDownProcList;
+    QVector< IProc* > keyUpProcList;
+    QVector< IProc* > focusInProcList;
+    QVector< IProc* > focusOutProcList;
+
+    void _addKeyDownProc(IProc* iproc);
+    void _addKeyUpProc(IProc* iproc);
+    void _addFocusInProc(IProc* iproc);
+    void _addFocusOutProc(IProc* iproc);
 
 public slots:
     void toAction(QString actionId);
