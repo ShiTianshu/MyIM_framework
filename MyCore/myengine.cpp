@@ -1,6 +1,7 @@
 #include "myengine.h"
+#include "typeinfo"
 #include "../MyBase/global.h"
-#include "../MyBase/iact.h"
+#include "../MyBase/iactgroup.h"
 
 #include <QDebug>
 
@@ -32,8 +33,30 @@ void MyEngine::initialize(const QMap<QString, QVariant> &envs)
     for (QMap< QString, IMod* >::iterator it = this->mods.begin();
          it != this->mods.end(); ++it)
     {
+        // 模块初始化。
+        qDebug() << QString("%1初始化").arg(it.value()->getFullName());
         it.value()->initialize(envs);
+        qDebug() << QString("%1连接信号槽").arg(it.value()->getFullName());
+        // 连接信号和槽
+        connect(it.value(), SIGNAL(action(QString)),
+                this, SLOT(toAction(QString)));
+
+        connect(it.value(), SIGNAL(find(QString,QString,QVector<Global::SrcEle>*)),
+                this, SLOT(find(QString,QString,QVector<Global::SrcEle>*)));
+
+        connect(it.value(), SIGNAL(findOne(QString,QString,Global::SrcEle*)),
+                this, SLOT(findOne(QString,QString,Global::SrcEle*)));
+
+        connect(it.value(), SIGNAL(remove(QString,uint)),
+                this, SLOT(remove(QString,uint)));
+
+        connect(it.value(), SIGNAL(add(QString,Global::SrcEle*)),
+                this, SLOT(add(QString,Global::SrcEle*)));
+
+        connect(it.value(), SIGNAL(update(QString,Global::SrcEle*)),
+                this, SLOT(update(QString,Global::SrcEle*)));
     }
+
 }
 
 
@@ -104,24 +127,32 @@ void MyEngine::addFocusOutProcList(QStringList procList)
 
 void MyEngine::findOne(QString srcId, QString key, Global::SrcEle *pe)
 {
-
+    ISrc* ps = this->_getSrc(srcId);
+    ps->findOne(key, pe);
 }
 
 void MyEngine::find(QString srcId, QString key, QVector<Global::SrcEle> *pev)
 {
+    ISrc* ps = this->_getSrc(srcId);
+    ps->find(key, pev);
 }
 
 void MyEngine::remove(QString srcId, uint id)
 {
+    ISrc* ps = this->_getSrc(srcId);
+    ps->remove(id);
 }
 
 void MyEngine::update(QString srcId, Global::SrcEle *pe)
 {
+    ISrc* ps = this->_getSrc(srcId);
+    ps->update(pe);
 }
 
 void MyEngine::add(QString srcId, Global::SrcEle *pe)
 {
-
+    ISrc* ps = this->_getSrc(srcId);
+    ps->add(pe);
 }
 
 void MyEngine::toAction(QString actionId)
@@ -129,22 +160,21 @@ void MyEngine::toAction(QString actionId)
     if (actionId.contains("#"))
     {
         // action group调用
-
+        QStringList tmp = actionId.split("#");
+        IAct* pa = this->_getAct(tmp.at(0));
+        if (typeid(pa) != typeid(IActGroup*))
+        {
+            throw QString("模块%1不是ActGroup").arg(pa->getFullName());
+        }
+        IActGroup* pag = (IActGroup*) pa;
+        pag->execute(tmp.at(1));
     }
     else
     {
         // 独立的action 调用
-        QMap< QString, IMod* >::Iterator it = this->mods.find(actionId);
-        if (it != this->mods.end())
-        {
-            if (((IMod*)it.value())->getType() != ACT_MOD)
-            {
-                throw QString("%1不是有效的Act模块").arg(((IMod*)it.value())->getFullName());
-            }
-            ((IAct*)it.value())->execute();
-        }
+        IAct* pa = this->_getAct(actionId);
+        pa->execute();
     }
-
 }
 
 
@@ -189,6 +219,34 @@ void MyEngine::onFocusOut()
     {
         ((IProc*)*it)->execute();
     }
+}
+
+ISrc *MyEngine::_getSrc(QString srcId)
+{
+    QMap< QString, IMod* >::iterator it = this->mods.find(srcId);
+    if (it == mods.end())
+    {
+        throw QString("必需的模块不存在：%1").arg(srcId);
+    }
+    else if (it.value()->getType() != SRC_MOD)
+    {
+        throw QString("调用的模块：%1不是Src模块").arg(it.value()->getFullName());
+    }
+    return ((ISrc*)it.value());
+}
+
+IAct *MyEngine::_getAct(QString actId)
+{
+    QMap< QString, IMod* >::iterator it = this->mods.find(actId);
+    if (it == mods.end())
+    {
+        throw QString("必需的模块不存在：%1").arg(actId);
+    }
+    else if (it.value()->getType() != ACT_MOD)
+    {
+        throw QString("调用的模块：%1不是Act模块").arg(it.value()->getFullName());
+    }
+    return ((IAct*)it.value());
 }
 
 

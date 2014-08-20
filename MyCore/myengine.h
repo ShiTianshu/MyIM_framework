@@ -8,6 +8,8 @@
 #include <QObject>
 
 #include "../MyBase/iproc.h"
+#include "../MyBase/isrc.h"
+#include "../MyBase/iact.h"
 
 class MyEngine:
         public QObject
@@ -38,6 +40,9 @@ private:
     QVector< IProc* > keyUpProcList;
     QVector< IProc* > focusInProcList;
     QVector< IProc* > focusOutProcList;
+
+    ISrc *_getSrc(QString srcId);
+    IAct *_getAct(QString actId);
 
     void _addKeyDownProc(IProc* iproc);
     void _addKeyUpProc(IProc* iproc);

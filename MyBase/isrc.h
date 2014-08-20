@@ -11,8 +11,8 @@ public:
     ISrc(QString id);
     virtual ~ISrc() = 0;
 
-    virtual void find(QString key, Global::SrcEle *pe) = 0;
-    virtual void findOne(QString key, QVector< Global::SrcEle > *pev) = 0;
+    virtual void findOne(QString key, Global::SrcEle *pe) = 0;
+    virtual void find(QString key, QVector< Global::SrcEle > *pev) = 0;
     virtual void remove(uint id) = 0;
     virtual void update(Global::SrcEle *pe) = 0;
     virtual void add(Global::SrcEle *pe) = 0;

@@ -17,14 +17,16 @@ SOURCES += \
     iact.cpp \
     iproc.cpp \
     global.cpp \
-    isrc.cpp
+    isrc.cpp \
+    iactgroup.cpp
 
 HEADERS += \
     imod.h \
     iact.h \
     iproc.h \
     global.h \
-    isrc.h
+    isrc.h \
+    iactgroup.h
 unix {
     target.path = /usr/lib
     INSTALLS += target
