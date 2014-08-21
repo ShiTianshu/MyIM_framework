@@ -3,6 +3,9 @@
 
 #include "simplesrc_global.h"
 #include "../MyBase/isrc.h"
+#include <QFile>
+#include <QHash>
+#include <QVector>
 
 class SIMPLESRCSHARED_EXPORT SimpleSrc: public ISrc
 {
@@ -17,6 +20,11 @@ public:
     virtual void update(Global::SrcEle *pe);
     virtual void find(QString key, QVector<Global::SrcEle> *pev);
     virtual void findOne(QString key, Global::SrcEle *pe);
+
+private:
+    virtual void _loadTxtFile(QFile *txtFile);
+    virtual void _loadBinFile(QFile *binFile);
+    virtual void _createBinFile();
 };
 
 extern "C" SIMPLESRCSHARED_EXPORT SimpleSrc* GetInstance(QString modId);
