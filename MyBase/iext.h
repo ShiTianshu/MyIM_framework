@@ -12,6 +12,7 @@ class IExt: public IMod
 {
 public:
     IExt(QString id);
+    ~IExt();
 };
 
 #endif // IEXT_H

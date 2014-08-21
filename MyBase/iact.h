@@ -20,7 +20,7 @@ class IAct:
 {
 public:
     IAct(QString id);
-    virtual ~IAct() = 0;
+    virtual ~IAct();
     virtual void execute(InputContext* pic) = 0;
 };
 

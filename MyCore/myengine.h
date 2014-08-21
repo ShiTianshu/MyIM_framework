@@ -11,13 +11,15 @@
 #include "../MyBase/isrc.h"
 #include "../MyBase/iact.h"
 
+class MyCore;
+
 class MyEngine:
         public QObject
 {
 
     Q_OBJECT
 public:
-    MyEngine(QString name);
+    MyEngine(QString name, MyCore *pc);
     virtual ~MyEngine();
     const QString & getName();
     void initialize(const QMap< QString, QVariant > &envs);
@@ -41,6 +43,9 @@ private:
     QVector< IProc* > focusInProcList;
     QVector< IProc* > focusOutProcList;
 
+    // 核心实例
+    MyCore* core;
+
     // 获得模块
     ISrc *_getSrc(QString srcId);
     IAct *_getAct(QString actId);
@@ -52,7 +57,7 @@ private:
     void _addFocusOutProc(IProc* iproc);
 
 public slots:
-    void toAction(QString actionId, InputContext* pic);
+    void toAction(QString actionId);
     void findOne(QString srcId, QString key, Global::SrcEle *pe);
     void find(QString srcId, QString key, QVector< Global::SrcEle > *pev);
     void remove(QString srcId, uint id);

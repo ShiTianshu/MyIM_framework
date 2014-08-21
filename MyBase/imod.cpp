@@ -8,6 +8,11 @@ IMod::IMod(QString id)
     this->name = "IMod";
 }
 
+IMod::~IMod()
+{
+
+}
+
 const QString &IMod::getId()
 {
     return this->id;
@@ -39,9 +44,30 @@ QStringList IMod::getOptionalParams()
     return QStringList();
 }
 
-/*
-void IMod::initialize(const QMap<QString, QVariant> &)
+QVariant IMod::getIdConfig(const QMap<QString, QVariant> &envs, QString key)
 {
-
+    QMap< QString, QVariant >::const_iterator it;
+    it = envs.find(QString("%1/%2").arg(this->id).arg(key));
+    if (it == envs.end())
+    {
+        return QVariant();
+    }
+    else
+    {
+        return it.value();
+    }
 }
-*/
+
+QVariant IMod::getNameConfig(const QMap<QString, QVariant> &envs, QString key)
+{
+    QMap< QString, QVariant >::const_iterator it;
+    it = envs.find(QString("%1/%2").arg(this->name).arg(key));
+    if (it == envs.end())
+    {
+        return QVariant();
+    }
+    else
+    {
+        return it.value();
+    }
+}

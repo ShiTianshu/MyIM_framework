@@ -2,12 +2,14 @@
 #include "typeinfo"
 #include "../MyBase/global.h"
 #include "../MyBase/iactgroup.h"
+#include "mycore.h"
 
 #include <QDebug>
 
-MyEngine::MyEngine(QString name)
+MyEngine::MyEngine(QString name, MyCore *pc)
 {
     this->name = name;
+    this->core = pc;
 }
 
 
@@ -56,7 +58,6 @@ void MyEngine::initialize(const QMap<QString, QVariant> &envs)
         connect(it.value(), SIGNAL(update(QString,Global::SrcEle*)),
                 this, SLOT(update(QString,Global::SrcEle*)));
     }
-
 }
 
 
@@ -155,8 +156,10 @@ void MyEngine::add(QString srcId, Global::SrcEle *pe)
     ps->add(pe);
 }
 
-void MyEngine::toAction(QString actionId, InputContext* pic)
+void MyEngine::toAction(QString actionId)
 {
+    InputContext* pic = this->core->getCurrCtx();
+
     if (actionId.contains("#"))
     {
         // action group调用
@@ -280,6 +283,7 @@ void MyEngine::_addFocusOutProc(IProc* iproc)
 {
     this->focusOutProcList.append(iproc);
 }
+
 
 
 

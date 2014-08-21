@@ -17,12 +17,13 @@ class IMod: public QObject
     Q_OBJECT
 public:
     IMod(QString id);
-    virtual ~IMod() = 0;
+    virtual ~IMod();
     virtual void initialize(const QMap< QString, QVariant > &) = 0;
     const QString &getId();
     const QString &getName();
     QString getFullName();
     const char &getType();
+
     virtual QStringList getNeccessaryParams();
     virtual QStringList getOptionalParams();
 
@@ -31,6 +32,8 @@ private:
 protected:
     QString name;
     char type;
+    QVariant getIdConfig(const QMap< QString, QVariant > &envs, QString key);
+    QVariant getNameConfig(const QMap< QString, QVariant > &envs, QString key);
 signals:
 
     /**

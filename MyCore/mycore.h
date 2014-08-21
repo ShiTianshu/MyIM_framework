@@ -29,6 +29,8 @@ public:
     virtual void onFocusIn();
     virtual void onFocusOut();
 
+    InputContext *getCurrCtx();
+
 private:
     QMap< QString, QVariant > envs;
     QMap< QString, MyEngine* > engines;
@@ -41,6 +43,9 @@ private:
     virtual IMod* _loadMod(const QString & modName, const QString & modId);
     virtual void _loadEngine(const QString &name, const QString &engine);
     virtual void _loadIncludeConfig(const QStringList & includeList);
+
+    void _initEngines();
+
 };
 
 typedef MyCore* (*GetCoreInstance) ();

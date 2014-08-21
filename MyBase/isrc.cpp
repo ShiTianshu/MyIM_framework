@@ -6,3 +6,8 @@ ISrc::ISrc(QString id):
     this->type = SRC_MOD;
     this->name = "ISrc";
 }
+
+ISrc::~ISrc()
+{
+
+}

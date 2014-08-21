@@ -18,7 +18,7 @@ class IProc:
 {
 public:
     IProc(QString id);
-    virtual ~IProc()=0;
+    virtual ~IProc();
     virtual void execute(InputContext* pic)=0;
 };
 

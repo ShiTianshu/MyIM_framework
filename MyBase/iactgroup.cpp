@@ -6,3 +6,8 @@ IActGroup::IActGroup(QString id):
     this->type = ACT_MOD;
     this->name = "IActGroup";
 }
+
+IActGroup::~IActGroup()
+{
+
+}

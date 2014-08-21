@@ -8,4 +8,9 @@ IProc::IProc(QString id):
     this->name = "IProc";
 }
 
+IProc::~IProc()
+{
+
+}
+
 

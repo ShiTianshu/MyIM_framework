@@ -45,12 +45,14 @@ IMod* MyCore::_loadMod(const QString &modName, const QString &modId)
         throw QString("无法创建模块实例%1").arg(modPath);
     }
     return pm;
+    qDebug() << QString("成功加载模块%1").arg(pm->getFullName());
 }
 
 void MyCore::initialize()
 {
     qDebug() << "核心初始化开始";
     this->_loadConfig();
+    this->_initEngines();
     qDebug() << "核心初始化完成";
 }
 
@@ -124,8 +126,14 @@ void MyCore::onFocusOut()
     this->currEngine->onFocusOut(this->currCtx);
 }
 
+InputContext *MyCore::getCurrCtx()
+{
+    return this->currCtx;
+}
+
 void MyCore::_loadConfig()
 {
+    qDebug() << "加载配置文件开始";
     QSettings basicCfg(QString("%1/conf/myim.ini").arg(Global::GetMyPath()), QSettings::IniFormat);
     Global::SetSettingsCodec(&basicCfg);
     // 加载额外的配置文件
@@ -140,18 +148,15 @@ void MyCore::_loadConfig()
         this->_loadEngine(name, engine);
         basicCfg.endGroup();
     }
-    qDebug() << this->envs;
-    qDebug() << this->engines;
+    qDebug() << "加载配置文件完成";
 }
 
 void MyCore::_loadEngine(const QString & name, const QString & engine)
 {
-    qDebug() << "engine:" << name << "@" << engine;
+    qDebug() << "加载ENGINE:" << name << "@" << engine;
     QSettings cfg(QString("%1/engine/%2.ini").arg(Global::GetMyPath()).arg(engine), QSettings::IniFormat);
     Global::SetSettingsCodec(&cfg);
-    qDebug() << cfg.allKeys();
-    qDebug() << cfg.childGroups();
-    MyEngine* pe = new MyEngine(name);
+    MyEngine* pe = new MyEngine(name, this);
     this->engines[name] = pe;
     // 加载模块
     QStringList sections;
@@ -161,8 +166,7 @@ void MyCore::_loadEngine(const QString & name, const QString & engine)
         cfg.beginGroup(sec);
         foreach(QString k, cfg.allKeys())
         {
-            qDebug() << k;
-            if (k.contains("#"))
+            if (k.contains("/"))
             {
                 // 参数
                 this->envs[k] = cfg.value(k);
@@ -176,6 +180,7 @@ void MyCore::_loadEngine(const QString & name, const QString & engine)
         }
         cfg.endGroup();
     }
+    qDebug() << "加载事件回调链";
     // 加载事件回调处理器链
     cfg.beginGroup("ENGINE");
     pe->addKeyDownProcList(cfg.value("keydown").toStringList());
@@ -197,4 +202,16 @@ void MyCore::_loadIncludeConfig(const QStringList & includeList)
         }
     }
 }
+
+void MyCore::_initEngines()
+{
+    qDebug() << "初始化引擎开始";
+    for (QMap< QString, MyEngine* >::iterator it = this->engines.begin();
+         it != this->engines.end(); ++it)
+    {
+        it.value()->initialize(this->envs);
+    }
+    qDebug() << "初始化引擎完成";
+}
+
 

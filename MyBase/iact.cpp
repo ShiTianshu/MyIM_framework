@@ -7,3 +7,8 @@ IAct::IAct(QString id):
     this->type = ACT_MOD;
     this->name = "IAct";
 }
+
+IAct::~IAct()
+{
+
+}

@@ -8,3 +8,8 @@ IExt::IExt(QString id):
     this->type = EXT_MOD;
     this->name = "IExt";
 }
+
+IExt::~IExt()
+{
+
+}
