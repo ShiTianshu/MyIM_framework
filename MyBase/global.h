@@ -22,7 +22,7 @@ typedef struct TagSrcElement
     uint id;
     QString key;
     QString value;
-    QVariant extInfo;
+    int ext;        // 用作频率或者其它标识，或是其它数据的id等。
 }SrcEle;
 
 }

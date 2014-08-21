@@ -54,12 +54,82 @@ void MyCore::initialize()
     qDebug() << "核心初始化完成";
 }
 
+void MyCore::setEngine(QString engineId)
+{
+    // 切换引擎要清空所有的上下文
+    for (QMap< ulong, InputContext* >::iterator it = this->ctxs.begin();
+         it != this->ctxs.end(); ++it)
+    {
+        it.value()->resetAll();
+    }
+    // 切换引擎
+    QMap< QString, MyEngine* >::iterator itm;
+    itm = this->engines.find(engineId);
+    if (itm == this->engines.end())
+    {
+        throw QString("切换%1无效").arg(engineId);
+    }
+    this->currEngine = itm.value();
+}
+
+void MyCore::registerCtx(ulong id)
+{
+    qDebug() << QString("创建上下文%1").arg(id);
+    InputContext* pic = new InputContext(id);
+    this->ctxs[id] = pic;
+}
+
+void MyCore::unregisterCtx(ulong id)
+{
+    qDebug() << QString("注销上下文%1").arg(id);
+    QMap< ulong, InputContext* >::iterator it;
+    it = this->ctxs.find(id);
+    if (it == this->ctxs.end())
+    {
+        throw QString("注销无效的上下文。ID=%1").arg(id);
+    }
+    delete it.value();
+    this->ctxs.remove(id);
+}
+
+void MyCore::setCurrCtx(ulong id)
+{
+    qDebug() << QString("上下文从%1切换到%2").arg(this->currCtx->id).arg(id);
+    QMap< ulong, InputContext* >::iterator it;
+    it = this->ctxs.find(id);
+    if (it == this->ctxs.end())
+    {
+        throw QString("使用无效的上下文。ID=%1").arg(id);
+    }
+    this->currCtx = it.value();
+}
+
+void MyCore::onKeyDown(char key)
+{
+    this->currEngine->onKeyDown(key, this->currCtx);
+}
+
+void MyCore::onKeyUp(char key)
+{
+    this->currEngine->onKeyUp(key, this->currCtx);
+}
+
+void MyCore::onFocusIn()
+{
+    this->currEngine->onFocusIn(this->currCtx);
+}
+
+void MyCore::onFocusOut()
+{
+    this->currEngine->onFocusOut(this->currCtx);
+}
+
 void MyCore::_loadConfig()
 {
     QSettings basicCfg(QString("%1/conf/myim.ini").arg(Global::GetMyPath()), QSettings::IniFormat);
     Global::SetSettingsCodec(&basicCfg);
     // 加载额外的配置文件
-    QStringList includeList = basicCfg.value("include").toStringList();
+    QStringList includeList = basicCfg.value("configs").toStringList();
     this->_loadIncludeConfig(includeList);
     // 加载引擎配置文件
     foreach (QString str, basicCfg.childGroups())
@@ -107,7 +177,7 @@ void MyCore::_loadEngine(const QString & name, const QString & engine)
         cfg.endGroup();
     }
     // 加载事件回调处理器链
-    cfg.beginGroup("EVENT");
+    cfg.beginGroup("ENGINE");
     pe->addKeyDownProcList(cfg.value("keydown").toStringList());
     pe->addKeyUpProcList(cfg.value("keyup").toStringList());
     pe->addFocusInProcList(cfg.value("focusin").toStringList());

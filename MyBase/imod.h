@@ -7,14 +7,18 @@
 
 #include "global.h"
 
-// 模块接口
+/** --------------------------------------------------------------------
+ * @brief The IMod class
+ * 基本模块接口，不可直接继承使用。
+ * ---------------------------------------------------------------------
+ */
 class IMod: public QObject
 {
     Q_OBJECT
 public:
     IMod(QString id);
     virtual ~IMod() = 0;
-    virtual void initialize(const QMap< QString, QVariant > &);
+    virtual void initialize(const QMap< QString, QVariant > &) = 0;
     const QString &getId();
     const QString &getName();
     QString getFullName();

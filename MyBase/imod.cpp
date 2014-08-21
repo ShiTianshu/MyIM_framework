@@ -39,7 +39,9 @@ QStringList IMod::getOptionalParams()
     return QStringList();
 }
 
+/*
 void IMod::initialize(const QMap<QString, QVariant> &)
 {
 
 }
+*/

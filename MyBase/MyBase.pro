@@ -18,7 +18,9 @@ SOURCES += \
     iproc.cpp \
     global.cpp \
     isrc.cpp \
-    iactgroup.cpp
+    iactgroup.cpp \
+    inputcontext.cpp \
+    iext.cpp
 
 HEADERS += \
     imod.h \
@@ -26,7 +28,9 @@ HEADERS += \
     iproc.h \
     global.h \
     isrc.h \
-    iactgroup.h
+    iactgroup.h \
+    inputcontext.h \
+    iext.h
 unix {
     target.path = /usr/lib
     INSTALLS += target

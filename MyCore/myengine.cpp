@@ -155,7 +155,7 @@ void MyEngine::add(QString srcId, Global::SrcEle *pe)
     ps->add(pe);
 }
 
-void MyEngine::toAction(QString actionId)
+void MyEngine::toAction(QString actionId, InputContext* pic)
 {
     if (actionId.contains("#"))
     {
@@ -167,57 +167,65 @@ void MyEngine::toAction(QString actionId)
             throw QString("模块%1不是ActGroup").arg(pa->getFullName());
         }
         IActGroup* pag = (IActGroup*) pa;
-        pag->execute(tmp.at(1));
+        pag->executeGroup(tmp.at(1), pic);
     }
     else
     {
         // 独立的action 调用
         IAct* pa = this->_getAct(actionId);
-        pa->execute();
+        pa->execute(pic);
     }
 }
 
 
-void MyEngine::onKeyDown()
+void MyEngine::onKeyDown(char key, InputContext *pic)
 {
+    // 设置键值
+    pic->key = key;
+    pic->keyPress = true;
+    // 调用链
     QVector< IProc* >::iterator it;
     for (it = this->keyDownProcList.begin();
          it != this->keyDownProcList.end(); ++it)
     {
-        ((IProc*)*it)->execute();
+        ((IProc*)*it)->execute(pic);
     }
 }
 
 
-void MyEngine::onKeyUp()
+void MyEngine::onKeyUp(char key, InputContext *pic)
 {
+    // 设置键值
+    pic->key = key;
+    pic->keyPress = false;
+    // 调用链
     QVector< IProc* >::iterator it;
     for (it = this->keyUpProcList.begin();
          it != this->keyUpProcList.end(); ++it)
     {
-        ((IProc*)*it)->execute();
+        ((IProc*)*it)->execute(pic);
     }
 }
 
 
-void MyEngine::onFocusIn()
+void MyEngine::onFocusIn(InputContext *pic)
 {
     QVector< IProc* >::iterator it;
     for (it = this->focusInProcList.begin();
          it != this->focusInProcList.end(); ++it)
     {
-        ((IProc*)*it)->execute();
+        ((IProc*)*it)->execute(pic);
     }
 }
 
 
-void MyEngine::onFocusOut()
+void MyEngine::onFocusOut(InputContext *pic)
 {
     QVector< IProc* >::iterator it;
     for (it = this->focusOutProcList.begin();
          it != this->focusOutProcList.end(); ++it)
     {
-        ((IProc*)*it)->execute();
+        ((IProc*)*it)->execute(pic);
     }
 }
 
