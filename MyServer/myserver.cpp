@@ -6,17 +6,24 @@
 
 MyServer::MyServer()
 {
-
+    this->serverName = "myim_server";
+    this->server = new QLocalServer();
 }
 
 MyServer::~MyServer()
 {
-
+    delete this->server;
 }
 
 void MyServer::initialize()
 {
-    // 创建输入法核心。
+    this->_initCore();
+    this->_initSocket();
+}
+
+// 创建输入法核心。
+void MyServer::_initCore()
+{
     try
     {
         QString corePath = QString("%1/mod/MyCore").arg(Global::GetMyPath());
@@ -42,3 +49,50 @@ void MyServer::initialize()
         throw QString("核心初始化失败，原因：\n\t%1\n").arg(exception);
     }
 }
+
+// 创建LocalSocket
+void MyServer::_initSocket()
+{
+    if (this->_isServerRun())
+    {
+        throw QString("服务器已经在运行了");
+    }
+    this->server->listen(this->serverName);
+    connect(this->server, SIGNAL(newConnection()), this, SLOT(newConnection()));
+}
+
+bool MyServer::_isServerRun()
+{
+    // 用一个localsocket去连一下,如果能连上就说明
+    // 有一个在运行了
+    QLocalSocket ls;
+    ls.connectToServer(this->serverName);
+    if (ls.waitForConnected(1000)){
+        // 说明已经在运行了
+        ls.disconnectFromServer();
+        ls.close();
+        return true;
+    }
+    return false;
+}
+
+void MyServer::newConnection()
+{
+    QLocalSocket *newsocket = this->server->nextPendingConnection();
+    connect(newsocket, SIGNAL(readyRead()), this, SLOT(readyRead()));
+}
+
+void MyServer::readyRead()
+{
+    QLocalSocket* socket = static_cast< QLocalSocket* >(sender());
+    if (!socket)
+    {
+        throw QString("读取数据时找不到socket");
+    }
+    QTextStream in(socket);
+    QString msg;
+    msg = in.readAll();
+}
+
+
+

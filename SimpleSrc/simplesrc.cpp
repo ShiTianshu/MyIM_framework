@@ -21,15 +21,6 @@ SimpleSrc::~SimpleSrc()
 
 }
 
-//+---------------------------------------------------------------------
-//
-// 初始化
-// 首选查找有没有.bin文件，如果有.bin文件，直接加载。
-// 如果没有.bin文件，继续查找同名的.txt文件，如果没有.txt文件，异常。
-// 有.txt文件，则转化成.bin文件。
-//
-//----------------------------------------------------------------------
-
 void SimpleSrc::initialize(const QMap<QString, QVariant> &envs)
 {
     qDebug() << "SimpleSrc初始化";
@@ -65,10 +56,6 @@ void SimpleSrc::initialize(const QMap<QString, QVariant> &envs)
         this->_createBinFile(&binFile);
         binFile.close();
     }
-
-//    Global::SrcEle src;
-//    this->findOne("IbW_", &src);
-//    qDebug() << src.key << src.value << src.id;
 }
 
 void SimpleSrc::add(Global::SrcEle *pe)
@@ -108,13 +95,6 @@ void SimpleSrc::findOne(QString key, Global::SrcEle *pe)
         *pe = this->words.at(idx);
     }
 }
-
-//+---------------------------------------------------------------------
-//
-// 加载txt文件
-// 词条放入vector数组。索引使用hash
-//
-//----------------------------------------------------------------------
 
 void SimpleSrc::_loadTxtFile(QFile *pf)
 {

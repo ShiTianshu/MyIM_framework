@@ -1,21 +1,20 @@
 #-------------------------------------------------
 #
-# Project created by QtCreator 2014-08-17T11:50:47
+# Project created by QtCreator 2014-08-22T15:06:46
 #
 #-------------------------------------------------
 
-QT       += core gui network
+QT       += core gui
 
 greaterThan(QT_MAJOR_VERSION, 4): QT += widgets
 
-TARGET = MyServer
+TARGET = WinHookClient
 TEMPLATE = app
 
-LIBS += -L $$(MYIM_HOME)/lib -lMyBase
 
 SOURCES += main.cpp\
-        myserver.cpp
+        hook.cpp
 
-HEADERS  += myserver.h
+HEADERS  += hook.h
 
 DESTDIR = $$(MYIM_HOME)/bin

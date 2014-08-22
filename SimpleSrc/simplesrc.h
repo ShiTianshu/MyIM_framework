@@ -21,9 +21,9 @@ public:
     virtual void find(QString key, QVector<Global::SrcEle> *pev);
     virtual void findOne(QString key, Global::SrcEle *pe);
 
-public:
+private:
     QVector< Global::SrcEle > words;    // 词条
-    QHash < QString, quint32 > indexs;     // 索引 %10000为词条数，/10000为下标
+    QHash < QString, quint32 > indexs;  // 索引 %10000为词条数，/10000为下标
 
 private:
     virtual void _loadTxtFile(QFile *pf);
