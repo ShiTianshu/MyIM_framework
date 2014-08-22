@@ -13,17 +13,24 @@
 
 namespace Global {
 
-const QString & GetMyPath();
-void SetSettingsCodec(QSettings* settings, QByteArray codec="UTF-8");
-
 // 数据源的基本数据结构。
-typedef struct TagSrcElement
+class SrcEle
 {
+public:
     uint id;
     QString key;
     QString value;
     int ext;                // 用作频率或者其它标识，或是其它数据的id等。
-}SrcEle;
+    // Override operator << and >>.
+    friend QDataStream &operator<<(QDataStream &out, const SrcEle &obj);
+    friend QDataStream &operator>>(QDataStream &in, SrcEle &obj);
+
+    friend QDebug &operator<<(QDebug &out, const SrcEle &obj);
+};
+
+const QString & GetMyPath();
+void SetSettingsCodec(QSettings* settings, QByteArray codec="UTF-8");
+bool SrcLessThan(const SrcEle &src1, const SrcEle &src2);
 
 }
 #endif // GLOBAL_H

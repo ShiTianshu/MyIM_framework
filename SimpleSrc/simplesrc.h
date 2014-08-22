@@ -21,10 +21,15 @@ public:
     virtual void find(QString key, QVector<Global::SrcEle> *pev);
     virtual void findOne(QString key, Global::SrcEle *pe);
 
+public:
+    QVector< Global::SrcEle > words;    // 词条
+    QHash < QString, quint32 > indexs;     // 索引 %10000为词条数，/10000为下标
+
 private:
-    virtual void _loadTxtFile(QFile *txtFile);
-    virtual void _loadBinFile(QFile *binFile);
-    virtual void _createBinFile();
+    virtual void _loadTxtFile(QFile *pf);
+    virtual void _loadBinFile(QFile *pf);
+    virtual void _createBinFile(QFile *pf);
+    virtual void _createIndexs();
 };
 
 extern "C" SIMPLESRCSHARED_EXPORT SimpleSrc* GetInstance(QString modId);

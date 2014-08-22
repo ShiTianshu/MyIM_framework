@@ -35,4 +35,24 @@ void SetSettingsCodec(QSettings *settings, QByteArray codec)
     settings->setIniCodec(QTextCodec::codecForName(codec));
 }
 
+QDataStream &operator<<(QDataStream &out, const SrcEle &obj) {
+    out << obj.id << obj.key << obj.value << obj.ext;
+    return out;
+}
+
+QDataStream &operator>>(QDataStream &in, SrcEle &obj) {
+    in >> obj.id >> obj.key >> obj.value >> obj.ext;
+    return in;
+}
+
+QDebug &operator<<(QDebug &out, const SrcEle &obj) {
+    out <<obj.id << obj.key << obj.value;
+    return out;
+}
+
+bool SrcLessThan(const SrcEle &src1, const SrcEle &src2)
+{
+    return src1.key < src2.key;
+}
+
 }
