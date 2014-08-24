@@ -7,23 +7,30 @@ qint64 gClientId = 0;
 
 void RegisterClient()
 {
-    gSocket = new QLocalSocket();
-    //gSocket->connectToServer(SERVER_NAME);
-    gSocket->setServerName(SERVER_NAME);
-    qDebug() << gSocket->serverName();
-    qDebug() << gSocket->fullServerName();
-    gSocket->connectToServer();
-    qDebug() << gSocket->fullServerName();
-    if (gSocket->waitForConnected())
+//    gSocket = new QLocalSocket();
+//    gSocket->connectToServer(SERVER_NAME);
+//    if (gSocket->waitForConnected())
+//    {
+//        qDebug() << "连接成功。";
+//        gClientId = QDateTime::currentMSecsSinceEpoch();
+//        QString data = QString("%1|RC").arg(gClientId);
+//        gSocket->write(data.toLatin1());
+//        gSocket->flush();
+//    }
+//    else
+//    {
+//        qDebug() << "连接超时。" << gSocket->error() << gSocket->errorString();
+//    }
+    //QLocalSocket socket;
+    QLocalSocket socket;
+    socket.connectToServer("myim_server");
+    if (socket.waitForConnected())
     {
-        gClientId = QDateTime::currentMSecsSinceEpoch();
-        QString data = QString("%1|RC").arg(gClientId);
-        gSocket->write(data.toLatin1());
-        gSocket->flush();
+        qDebug() << "t";
     }
     else
     {
-        qDebug() << "连接超时。" << gSocket->error() << gSocket->errorString();
+        qDebug() << "F";
     }
 }
 

@@ -6,11 +6,12 @@
 
 MyServer::MyServer()
 {
-    this->server = new QLocalServer();
+
 }
 
 MyServer::~MyServer()
 {
+    qDebug() << "析构MyServer";
     delete this->server;
 }
 
@@ -53,16 +54,12 @@ void MyServer::_initCore()
 void MyServer::_initSocket()
 {
     qDebug() << "创建server";
-//    if (this->_isServerRun())
-//    {
-//        throw QString("服务器已经在运行了");
-//    }
-    this->server->setSocketOptions(QLocalServer::WorldAccessOption);
+    if (this->_isServerRun())
+    {
+        throw QString("服务器已经在运行了");
+    }
+    this->server = new QLocalServer;
     qDebug() << this->server->listen(SERVER_NAME);
-    qDebug() << this->server->serverError() << this->server->errorString();
-    connect(this->server, SIGNAL(newConnection()), this, SLOT(newConnection()));
-    qDebug() << "开始侦听" << this->server->serverName() << this->server->fullServerName();
-    qDebug() << this->server->isListening();
 }
 
 bool MyServer::_isServerRun()
