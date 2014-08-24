@@ -19,9 +19,9 @@ public:
     virtual void setEngine(QString engineId);
 
     // 上下文相关
-    virtual void registerCtx(ulong id);
-    virtual void unregisterCtx(ulong id);
-    virtual void setCurrCtx(ulong id);
+    virtual void registerCtx(qint64 id);
+    virtual void unregisterCtx(qint64 id);
+    virtual void setCurrCtx(qint64 id);
 
     // 事件相关
     virtual void onKeyDown(char key);
@@ -34,7 +34,7 @@ public:
 private:
     QMap< QString, QVariant > envs;
     QMap< QString, MyEngine* > engines;
-    QMap< ulong, InputContext* > ctxs;
+    QMap< qint64, InputContext* > ctxs;
 
     InputContext* currCtx;  // 当前使用的上下文
     MyEngine* currEngine;   // 当前使用的引擎

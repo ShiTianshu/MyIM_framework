@@ -44,8 +44,8 @@ IMod* MyCore::_loadMod(const QString &modName, const QString &modId)
     {
         throw QString("无法创建模块实例%1").arg(modPath);
     }
-    return pm;
     qDebug() << QString("成功加载模块%1").arg(pm->getFullName());
+    return pm;
 }
 
 void MyCore::initialize()
@@ -59,7 +59,7 @@ void MyCore::initialize()
 void MyCore::setEngine(QString engineId)
 {
     // 切换引擎要清空所有的上下文
-    for (QMap< ulong, InputContext* >::iterator it = this->ctxs.begin();
+    for (QMap< qint64, InputContext* >::iterator it = this->ctxs.begin();
          it != this->ctxs.end(); ++it)
     {
         it.value()->resetAll();
@@ -74,17 +74,17 @@ void MyCore::setEngine(QString engineId)
     this->currEngine = itm.value();
 }
 
-void MyCore::registerCtx(ulong id)
+void MyCore::registerCtx(qint64 id)
 {
     qDebug() << QString("创建上下文%1").arg(id);
     InputContext* pic = new InputContext(id);
     this->ctxs[id] = pic;
 }
 
-void MyCore::unregisterCtx(ulong id)
+void MyCore::unregisterCtx(qint64 id)
 {
     qDebug() << QString("注销上下文%1").arg(id);
-    QMap< ulong, InputContext* >::iterator it;
+    QMap< qint64, InputContext* >::iterator it;
     it = this->ctxs.find(id);
     if (it == this->ctxs.end())
     {
@@ -94,10 +94,10 @@ void MyCore::unregisterCtx(ulong id)
     this->ctxs.remove(id);
 }
 
-void MyCore::setCurrCtx(ulong id)
+void MyCore::setCurrCtx(qint64 id)
 {
     qDebug() << QString("上下文从%1切换到%2").arg(this->currCtx->id).arg(id);
-    QMap< ulong, InputContext* >::iterator it;
+    QMap< qint64, InputContext* >::iterator it;
     it = this->ctxs.find(id);
     if (it == this->ctxs.end())
     {

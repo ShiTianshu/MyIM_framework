@@ -6,7 +6,6 @@
 
 MyServer::MyServer()
 {
-    this->serverName = "myim_server";
     this->server = new QLocalServer();
 }
 
@@ -53,12 +52,17 @@ void MyServer::_initCore()
 // 创建LocalSocket
 void MyServer::_initSocket()
 {
-    if (this->_isServerRun())
-    {
-        throw QString("服务器已经在运行了");
-    }
-    this->server->listen(this->serverName);
+    qDebug() << "创建server";
+//    if (this->_isServerRun())
+//    {
+//        throw QString("服务器已经在运行了");
+//    }
+    this->server->setSocketOptions(QLocalServer::WorldAccessOption);
+    qDebug() << this->server->listen(SERVER_NAME);
+    qDebug() << this->server->serverError() << this->server->errorString();
     connect(this->server, SIGNAL(newConnection()), this, SLOT(newConnection()));
+    qDebug() << "开始侦听" << this->server->serverName() << this->server->fullServerName();
+    qDebug() << this->server->isListening();
 }
 
 bool MyServer::_isServerRun()
@@ -66,7 +70,7 @@ bool MyServer::_isServerRun()
     // 用一个localsocket去连一下,如果能连上就说明
     // 有一个在运行了
     QLocalSocket ls;
-    ls.connectToServer(this->serverName);
+    ls.connectToServer(SERVER_NAME);
     if (ls.waitForConnected(1000)){
         // 说明已经在运行了
         ls.disconnectFromServer();
@@ -92,6 +96,7 @@ void MyServer::readyRead()
     QTextStream in(socket);
     QString msg;
     msg = in.readAll();
+    qDebug() << msg;
 }
 
 

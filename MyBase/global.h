@@ -5,11 +5,23 @@
 #include <QDebug>
 #include <QSettings>
 
+#define SERVER_NAME "myim_server"
+
+// 模块类型
 #define PROC_MOD    'P'
 #define ACT_MOD     'A'
 #define SRC_MOD     'S'
 #define EXT_MOD     'E'
 #define UNKNOWN_MOD 'U'
+
+// 功能键的标志位。
+#define LCONTROL    1
+#define RCONTROL    2
+#define LSHIFT      4
+#define RSHIFT      8
+#define LMENU       16
+#define RMENU       32
+#define WIN         64
 
 namespace Global {
 

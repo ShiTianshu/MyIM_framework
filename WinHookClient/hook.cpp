@@ -11,6 +11,10 @@ extern "C" LRESULT CALLBACK KbProc(int nCode, WPARAM wParam, LPARAM lParam)
                 .arg(nCode).arg(pkdhs->vkCode).arg(pkdhs->dwExtraInfo).arg(pkdhs->scanCode).arg(pkdhs->time).arg(pkdhs->flags).arg(wParam);
     qDebug() << GetKeyState(VK_CONTROL) << "  ctrl  " << GetKeyState(VK_LCONTROL);
     qDebug() << GetKeyState(VK_SHIFT) << "  shift  " << GetKeyState(VK_LSHIFT);
+
+
+
+
     return CallNextHookEx(gHook, nCode, wParam, lParam);
 }
 
