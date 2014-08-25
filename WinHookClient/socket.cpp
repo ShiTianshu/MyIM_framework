@@ -7,42 +7,34 @@ qint64 gClientId = 0;
 
 void RegisterClient()
 {
-//    gSocket = new QLocalSocket();
-//    gSocket->connectToServer(SERVER_NAME);
-//    if (gSocket->waitForConnected())
-//    {
-//        qDebug() << "连接成功。";
-//        gClientId = QDateTime::currentMSecsSinceEpoch();
-//        QString data = QString("%1|RC").arg(gClientId);
-//        gSocket->write(data.toLatin1());
-//        gSocket->flush();
-//    }
-//    else
-//    {
-//        qDebug() << "连接超时。" << gSocket->error() << gSocket->errorString();
-//    }
-    //QLocalSocket socket;
-    QLocalSocket socket;
-    socket.connectToServer("myim_server");
-    if (socket.waitForConnected())
+    if (gSocket)
     {
-        qDebug() << "t";
+        throw QString("已经注册了");
+    }
+    gSocket = new QLocalSocket();
+    gSocket->connectToServer(SERVER_NAME);
+    if (gSocket->waitForConnected())
+    {
+        qDebug() << "连接成功";
+        gClientId = QDateTime::currentMSecsSinceEpoch();
+        QString data = Global::RegisterClientData(gClientId);
+        gSocket->write(data.toLocal8Bit());
+        gSocket->flush();
     }
     else
     {
-        qDebug() << "F";
+        qDebug() << "连接本地服务器失败" << gSocket->error() << gSocket->errorString();
     }
 }
 
 
 void UnregisterClient()
 {
-    if (gSocket)
+    if (gSocket && gSocket->isWritable())
     {
-        QString data = QString("%1|UC").arg(gClientId);
-        gSocket->write(data.toLatin1());
+        QString data = Global::UnregisterClientData(gClientId);
+        gSocket->write(data.toLocal8Bit());
         gSocket->flush();
-        gSocket->close();
         delete gSocket;
         gSocket = 0;
         gClientId = 0;
@@ -50,19 +42,34 @@ void UnregisterClient()
 }
 
 
-void SendKeyUp(char keycode, uint flags)
+void SendKeyUp(int keycode, uint flags)
 {
-
+    if (gSocket && gSocket->isWritable())
+    {
+        QString data = Global::KeyData(gClientId, keycode, false, flags);
+        gSocket->write(data.toLocal8Bit());
+        gSocket->flush();
+    }
 }
 
 
-void SendKeyDown(char keycode, uint flags)
+void SendKeyDown(int keycode, uint flags)
 {
-
+    if (gSocket && gSocket->isWritable())
+    {
+        QString data = Global::KeyData(gClientId, keycode, true, flags);
+        gSocket->write(data.toLocal8Bit());
+        gSocket->flush();
+    }
 }
 
 
 void ChangePos(uint x, uint y)
 {
-
+    if (gSocket && gSocket->isWritable())
+    {
+        QString data = Global::PositionData(gClientId, x, y);
+        gSocket->write(data.toLocal8Bit());
+        gSocket->flush();
+    }
 }

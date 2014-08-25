@@ -30,8 +30,8 @@ public:
     void addFocusInProcList(QStringList procList);
     void addFocusOutProcList(QStringList procList);
 
-    void onKeyDown(char key, InputContext* pic);
-    void onKeyUp(char key, InputContext* pic);
+    void onKeyDown(uint key, InputContext* pic);
+    void onKeyUp(uint key, InputContext* pic);
     void onFocusIn(InputContext* pic);
     void onFocusOut(InputContext* pic);
 
@@ -43,7 +43,7 @@ private:
     QVector< IProc* > focusInProcList;
     QVector< IProc* > focusOutProcList;
 
-    // 核心实例
+    // 核心实例，用于获取当前的上下文
     MyCore* core;
 
     // 获得模块

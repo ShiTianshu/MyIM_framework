@@ -5,4 +5,5 @@ SUBDIRS += \
     MyCore \
     MyServer \
     SimpleSrc \
-    WinHookClient
+    WinHookClient \
+    SimpleUI

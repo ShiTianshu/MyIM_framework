@@ -106,12 +106,12 @@ void MyCore::setCurrCtx(qint64 id)
     this->currCtx = it.value();
 }
 
-void MyCore::onKeyDown(char key)
+void MyCore::onKeyDown(uint key)
 {
     this->currEngine->onKeyDown(key, this->currCtx);
 }
 
-void MyCore::onKeyUp(char key)
+void MyCore::onKeyUp(uint key)
 {
     this->currEngine->onKeyUp(key, this->currCtx);
 }

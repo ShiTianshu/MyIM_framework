@@ -24,11 +24,12 @@ public:
     virtual void setCurrCtx(qint64 id);
 
     // 事件相关
-    virtual void onKeyDown(char key);
-    virtual void onKeyUp(char key);
+    virtual void onKeyDown(uint key);
+    virtual void onKeyUp(uint key);
     virtual void onFocusIn();
     virtual void onFocusOut();
 
+    // 当前的InputContext是变换的，用于将其动态的传给engine
     InputContext *getCurrCtx();
 
 private:

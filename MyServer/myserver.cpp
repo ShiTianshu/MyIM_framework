@@ -1,6 +1,6 @@
 #include "myserver.h"
 #include "../MyBase/global.h"
-#include "../MyCore/mycore.h"
+
 
 #include <QLibrary>
 
@@ -12,6 +12,7 @@ MyServer::MyServer()
 MyServer::~MyServer()
 {
     qDebug() << "析构MyServer";
+    delete this->core;
     delete this->server;
 }
 
@@ -37,12 +38,12 @@ void MyServer::_initCore()
         {
             throw QString("核心模块缺少GetInstance函数");
         }
-        MyCore* pc = gci();
-        if (!pc)
+        this->core = gci();
+        if (!core)
         {
             throw QString("无法创建核心实例");
         }
-        pc->initialize();
+        core->initialize();
     }
     catch(QString exception)
     {
@@ -59,7 +60,11 @@ void MyServer::_initSocket()
         throw QString("服务器已经在运行了");
     }
     this->server = new QLocalServer;
-    qDebug() << this->server->listen(SERVER_NAME);
+    if (!this->server->listen(SERVER_NAME))
+    {
+        throw QString("服务器无法侦听");
+    }
+    connect(this->server, SIGNAL(newConnection()), this, SLOT(newConnection()));
 }
 
 bool MyServer::_isServerRun()
@@ -77,23 +82,90 @@ bool MyServer::_isServerRun()
     return false;
 }
 
+void MyServer::_dispatch(const QString &data)
+{
+    QStringList list = data.split("|");
+    qint64 id = list.at(0).toInt(0, 32);
+    if (!id)
+    {
+        throw QString("数据%1中无法获得正确的clientId").arg(data);
+    }
+
+    QString params = list.at(1);
+    QStringRef event = params.leftRef(2);
+    qDebug() << event;
+    if (event == "RC")
+    {
+        // 注册
+        this->core->registerCtx(id);
+    }
+    else if (event == "UC")
+    {
+        // 注销
+        this->core->unregisterCtx(id);
+    }
+    else if (event == "CC")
+    {
+        // 切换
+    }
+    else if (event == "PS")
+    {
+        // 位置
+    }
+    else if (event == "KD")
+    {
+        // 按键按下
+        uint keycode = list.at(1).midRef(2, 2).toInt(0, 16);
+        if (!keycode)
+        {
+            throw QString ("消息%1传送了无效的键值").arg(data);
+        }
+        this->core->onKeyDown(keycode);
+    }
+    else if (event == "KU")
+    {
+        // 按键抬起
+        uint keycode = list.at(1).midRef(2, 2).toInt(0, 16);
+        if (!keycode)
+        {
+            throw QString ("消息%1传送了无效的键值").arg(data);
+        }
+        this->core->onKeyUp(keycode);
+    }
+    else
+    {
+        throw QString ("无法识别的消息%1").arg(data);
+    }
+
+}
+
 void MyServer::newConnection()
 {
-    QLocalSocket *newsocket = this->server->nextPendingConnection();
-    connect(newsocket, SIGNAL(readyRead()), this, SLOT(readyRead()));
+    qDebug() << "client连接";
+    //this->currentSocket = this->server->nextPendingConnection();
+    QLocalSocket *socket = this->server->nextPendingConnection();
+    connect(socket, SIGNAL(readyRead()), this, SLOT(readyRead()));
+    connect(socket, SIGNAL(disconnected()), this, SLOT(disconnected()));
 }
 
 void MyServer::readyRead()
 {
-    QLocalSocket* socket = static_cast< QLocalSocket* >(sender());
+    QLocalSocket *socket = static_cast< QLocalSocket* >(sender());
     if (!socket)
     {
         throw QString("读取数据时找不到socket");
     }
     QTextStream in(socket);
-    QString msg;
-    msg = in.readAll();
-    qDebug() << msg;
+    QString data;
+    data = in.readAll();
+    qDebug() << data;
+    this->_dispatch(data);
+}
+
+void MyServer::disconnected()
+{
+    qDebug() << "断开当前连接";
+    qDebug() << this->server->isListening();
 }
 
 

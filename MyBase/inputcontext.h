@@ -27,11 +27,12 @@ public:
     QVector< Global::SrcEle* > originalMatched;// 原匹配，用于整句
     QVector< Global::SrcEle* > currentMatched; // 当前匹配，用于整句
     uint pageIndex;         // 候选页码。
-    QString textEdit;       // 嵌入编码。
+    QString editText;       // 嵌入编码。
     QString commitString;   // 上屏内容。
     uint compIndex;         // 编码光标，用于整句。
     QPoint caretPos;        // 光标位置。
     QMap< QString, QVariant > extInfo;  // 额外信息。
+    bool accepted;          // 是否处理了按键。如果处理了就吃掉。
 
     void resetKeys();       // 清空按键
     void resetInfos();      // 清空除按键外的全部

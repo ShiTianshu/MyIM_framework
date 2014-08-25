@@ -54,6 +54,20 @@ QVariant IMod::getIdConfig(const QMap<QString, QVariant> &envs, QString key)
     }
     else
     {
+        if (it.value().toString().startsWith("$"))
+        {
+            // 引入参数
+            QString key = it.value().toString().remove(0, 1);
+            it = envs.find(key);
+            if (it == envs.end())
+            {
+                return key;
+            }
+            else
+            {
+                return it.value();
+            }
+        }
         return it.value();
     }
 }
@@ -68,6 +82,20 @@ QVariant IMod::getNameConfig(const QMap<QString, QVariant> &envs, QString key)
     }
     else
     {
+        if (it.value().toString().contains("$"))
+        {
+            // 引入参数
+            QString key = it.value().toString().remove(0, 1);
+            it = envs.find(key);
+            if (it == envs.end())
+            {
+                return key;
+            }
+            else
+            {
+                return it.value();
+            }
+        }
         return it.value();
     }
 }

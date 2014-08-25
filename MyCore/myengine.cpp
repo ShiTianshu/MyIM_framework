@@ -181,8 +181,9 @@ void MyEngine::toAction(QString actionId)
 }
 
 
-void MyEngine::onKeyDown(char key, InputContext *pic)
+void MyEngine::onKeyDown(uint key, InputContext *pic)
 {
+    qDebug() << "keydown:" << key;
     // 设置键值
     pic->key = key;
     pic->keyPress = true;
@@ -196,8 +197,9 @@ void MyEngine::onKeyDown(char key, InputContext *pic)
 }
 
 
-void MyEngine::onKeyUp(char key, InputContext *pic)
+void MyEngine::onKeyUp(uint key, InputContext *pic)
 {
+    qDebug() << "keyup:" << key;
     // 设置键值
     pic->key = key;
     pic->keyPress = false;

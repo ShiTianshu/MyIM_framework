@@ -29,8 +29,9 @@ void InputContext::resetInfos()
     this->currentMatched.clear();
     this->extInfo.clear();
     this->originalMatched.clear();
-    this->textEdit.clear();
+    this->editText.clear();
     this->pageIndex = 0;
+    this->accepted = false;
 }
 
 void InputContext::resetAll()
