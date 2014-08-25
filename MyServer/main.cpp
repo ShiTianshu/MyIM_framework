@@ -14,14 +14,11 @@ int main(int argc, char *argv[])
     {
         server.initialize();
         qDebug() << "initialize结束";
+        return a.exec();
     }
     catch (QString exception)
     {
         QMessageBox::information(0, "出错了", exception);
-        return 1;
     }
-//    QLocalServer *server;
-//    server = new QLocalServer();
-//    server->listen("myim_server");
-    return a.exec();
+    return 1;
 }

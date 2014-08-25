@@ -2,7 +2,7 @@
 
 #include <QDebug>
 
-InputContext::InputContext(ulong id)
+InputContext::InputContext(qint64 id)
 {
     this->id = id;
     qDebug() << QString("创建上下文，ID=%1").arg(this->id);

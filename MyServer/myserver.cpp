@@ -3,6 +3,7 @@
 
 
 #include <QLibrary>
+#include <QMessageBox>
 
 MyServer::MyServer()
 {
@@ -84,16 +85,17 @@ bool MyServer::_isServerRun()
 
 void MyServer::_dispatch(const QString &data)
 {
-    QStringList list = data.split("|");
-    qint64 id = list.at(0).toInt(0, 32);
-    if (!id)
-    {
-        throw QString("数据%1中无法获得正确的clientId").arg(data);
-    }
+    qDebug() << QString("dispatch: %1").arg(data);
 
+    QStringList list = data.split("|");
+    bool ok;
+    qint64 id = list.at(0).toLongLong(&ok, 36);
+    if (!ok)
+    {
+        throw QString("无法从%1获得正确的id").arg(data);
+    }
     QString params = list.at(1);
     QStringRef event = params.leftRef(2);
-    qDebug() << event;
     if (event == "RC")
     {
         // 注册
@@ -115,8 +117,8 @@ void MyServer::_dispatch(const QString &data)
     else if (event == "KD")
     {
         // 按键按下
-        uint keycode = list.at(1).midRef(2, 2).toInt(0, 16);
-        if (!keycode)
+        uint keycode = list.at(1).midRef(2, 2).toInt(&ok, 16);
+        if (!ok)
         {
             throw QString ("消息%1传送了无效的键值").arg(data);
         }
@@ -136,13 +138,11 @@ void MyServer::_dispatch(const QString &data)
     {
         throw QString ("无法识别的消息%1").arg(data);
     }
-
 }
 
 void MyServer::newConnection()
 {
     qDebug() << "client连接";
-    //this->currentSocket = this->server->nextPendingConnection();
     QLocalSocket *socket = this->server->nextPendingConnection();
     connect(socket, SIGNAL(readyRead()), this, SLOT(readyRead()));
     connect(socket, SIGNAL(disconnected()), this, SLOT(disconnected()));
@@ -151,21 +151,24 @@ void MyServer::newConnection()
 void MyServer::readyRead()
 {
     QLocalSocket *socket = static_cast< QLocalSocket* >(sender());
-    if (!socket)
-    {
-        throw QString("读取数据时找不到socket");
-    }
     QTextStream in(socket);
     QString data;
     data = in.readAll();
-    qDebug() << data;
-    this->_dispatch(data);
+    try
+    {
+        this->_dispatch(data);
+    }
+    catch(QString exception)
+    {
+        QMessageBox::critical(0, "出错了", exception);
+    }
 }
 
 void MyServer::disconnected()
 {
     qDebug() << "断开当前连接";
-    qDebug() << this->server->isListening();
+    QLocalSocket *socket = static_cast< QLocalSocket* >(sender());
+    socket->close();
 }
 
 

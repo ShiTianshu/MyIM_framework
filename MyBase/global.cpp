@@ -72,13 +72,13 @@ QString KeyData(qint64 id, uint keycode, bool press,
     if (rwin) flags |= RWIN;
     if (press)
     {
-        return QString("%1|KD%2%3").arg(QString::number(id, 32))
+        return QString("%1|KD%2%3").arg(QString::number(id, 36))
                 .arg(keycode & 0xFF,2,16,QLatin1Char('0'))
                 .arg(flags & 0xFF,2,16,QLatin1Char('0'));
     }
     else
     {
-        return QString("%1|KU%2%3").arg(QString::number(id, 32))
+        return QString("%1|KU%2%3").arg(QString::number(id, 36))
                 .arg(keycode & 0xFF,2,16,QLatin1Char('0'))
                 .arg(flags & 0xFF,2,16,QLatin1Char('0'));
     }
@@ -88,13 +88,13 @@ QString KeyData(qint64 id, uint keycode, bool press, int flags)
 {
     if (press)
     {
-        return QString("%1|KD%2%3").arg(QString::number(id, 32))
+        return QString("%1|KD%2%3").arg(QString::number(id, 36))
                 .arg(keycode & 0xFF,2,16,QLatin1Char('0'))
                 .arg(flags & 0xFF,2,16,QLatin1Char('0'));
     }
     else
     {
-        return QString("%1|KU%2%3").arg(QString::number(id, 32))
+        return QString("%1|KU%2%3").arg(QString::number(id, 36))
                 .arg(keycode & 0xFF,2,16,QLatin1Char('0'))
                 .arg(flags & 0xFF,2,16,QLatin1Char('0'));
     }
@@ -102,17 +102,17 @@ QString KeyData(qint64 id, uint keycode, bool press, int flags)
 
 QString RegisterClientData(qint64 id)
 {
-    return QString("%1|RC").arg(QString::number(id, 32));
+    return QString("%1|RC").arg(QString::number(id, 36));
 }
 
 QString UnregisterClientData(qint64 id)
 {
-    return QString("%1|UC").arg(QString::number(id, 32));
+    return QString("%1|UC").arg(QString::number(id, 36));
 }
 
 QString ChangeClientData(qint64 id)
 {
-    return QString("%1|CC").arg(QString::number(id, 32));
+    return QString("%1|CC").arg(QString::number(id, 36));
 }
 
 QString ResponseData(bool accepted, QString commitString, QString editText)
@@ -130,7 +130,7 @@ void ParseResponseData(QString response, IMServerResponse &imres)
 
 QString PositionData(qint64 id, int x, int y)
 {
-    return QString("%1|%2,%3").arg(QString::number(id, 32)).arg(x).arg(y);
+    return QString("%1|%2,%3").arg(QString::number(id, 36)).arg(x).arg(y);
 }
 
 

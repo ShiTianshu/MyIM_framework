@@ -17,9 +17,9 @@
 class InputContext
 {
 public:
-    InputContext(ulong id);
+    InputContext(qint64 id);
     ~InputContext();
-    ulong id;               // 上下文id，对应进程。
+    qint64 id;              // 上下文id，对应进程。
     char key;               // 当前的按键。
     bool keyPress;          // 当前按键是否是按下的。
     QString composition;    // 当前编码。
