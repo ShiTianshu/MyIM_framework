@@ -183,32 +183,39 @@ void MyEngine::toAction(QString actionId)
 
 void MyEngine::onKeyDown(uint key, InputContext *pic)
 {
-    qDebug() << "keydown:" << key;
-    // 设置键值
-    pic->key = key;
-    pic->keyPress = true;
-    // 调用链
-    QVector< IProc* >::iterator it;
-    for (it = this->keyDownProcList.begin();
-         it != this->keyDownProcList.end(); ++it)
+    if (pic)
     {
-        ((IProc*)*it)->execute(pic);
+        qDebug() << "keydown:" << key;
+        // 设置键值
+        pic->key = (char)key;
+        pic->keyPress = true;
+        // 调用链
+        QVector< IProc* >::iterator it;
+        for (it = this->keyDownProcList.begin();
+             it != this->keyDownProcList.end(); ++it)
+        {
+            ((IProc*)*it)->execute(pic);
+        }
     }
 }
 
 
 void MyEngine::onKeyUp(uint key, InputContext *pic)
 {
-    qDebug() << "keyup:" << key;
-    // 设置键值
-    pic->key = key;
-    pic->keyPress = false;
-    // 调用链
-    QVector< IProc* >::iterator it;
-    for (it = this->keyUpProcList.begin();
-         it != this->keyUpProcList.end(); ++it)
+
+    if (pic)
     {
-        ((IProc*)*it)->execute(pic);
+        qDebug() << "keyup:" << key;
+        // 设置键值
+        pic->key = (char)key;
+        pic->keyPress = false;
+        // 调用链
+        QVector< IProc* >::iterator it;
+        for (it = this->keyUpProcList.begin();
+             it != this->keyUpProcList.end(); ++it)
+        {
+            ((IProc*)*it)->execute(pic);
+        }
     }
 }
 

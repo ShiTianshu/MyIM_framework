@@ -127,8 +127,8 @@ void MyServer::_dispatch(const QString &data)
     else if (event == "KU")
     {
         // 按键抬起
-        uint keycode = list.at(1).midRef(2, 2).toInt(0, 16);
-        if (!keycode)
+        uint keycode = list.at(1).midRef(2, 2).toInt(&ok, 16);
+        if (!ok)
         {
             throw QString ("消息%1传送了无效的键值").arg(data);
         }

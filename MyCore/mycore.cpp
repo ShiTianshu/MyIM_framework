@@ -8,7 +8,8 @@
 
 MyCore::MyCore()
 {
-
+    this->currCtx = 0;
+    this->currEngine = 0;
 }
 
 MyCore::~MyCore()
@@ -79,6 +80,7 @@ void MyCore::registerCtx(qint64 id)
     qDebug() << QString("创建上下文%1").arg(id);
     InputContext* pic = new InputContext(id);
     this->ctxs[id] = pic;
+    this->currCtx = pic;
 }
 
 void MyCore::unregisterCtx(qint64 id)
@@ -92,6 +94,7 @@ void MyCore::unregisterCtx(qint64 id)
     }
     delete it.value();
     this->ctxs.remove(id);
+    this->currCtx = 0;
 }
 
 void MyCore::setCurrCtx(qint64 id)
@@ -108,6 +111,7 @@ void MyCore::setCurrCtx(qint64 id)
 
 void MyCore::onKeyDown(uint key)
 {
+    qDebug() << this->currEngine->getName();
     this->currEngine->onKeyDown(key, this->currCtx);
 }
 
@@ -188,6 +192,11 @@ void MyCore::_loadEngine(const QString & name, const QString & engine)
     pe->addFocusInProcList(cfg.value("focusin").toStringList());
     pe->addFocusOutProcList(cfg.value("focusout").toStringList());
     cfg.endGroup();
+    // 如果没有currEngine则赋值
+    if (!this->currEngine)
+    {
+        this->currEngine = pe;
+    }
 }
 
 void MyCore::_loadIncludeConfig(const QStringList & includeList)

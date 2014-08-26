@@ -23,6 +23,7 @@ void Candidate::setInputContext(InputContext *pic)
 
 void Candidate::paintEvent(QPaintEvent *)
 {
+    qDebug() << "cand paint event";
     if (!this->pic)
     {
         // 启动时
@@ -40,8 +41,5 @@ void Candidate::paintEvent(QPaintEvent *)
 
         painter.setPen(this->fontPen);
         painter.drawText(QPoint(100, 100), "ivtd今天");
-
-        this->show();
     }
-
 }

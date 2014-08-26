@@ -40,13 +40,22 @@ void SimpleUI::initialize(const QMap<QString, QVariant> &envs)
 
 void SimpleUI::execute(InputContext *pic)
 {
+    qDebug() << "execute UI";
     if (!this->pcand)
     {
         throw QString ("Candidate没有初始化。");
     }
     pic->composition = "ivtd";
     this->pcand->setInputContext(pic);
-    this->pcand->repaint();
+    if (pic->key == 'A')
+    {
+        this->pcand->show();
+    }
+    else
+    {
+        this->pcand->hide();
+    }
+    //this->pcand->repaint();
 }
 
 
