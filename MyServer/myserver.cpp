@@ -83,10 +83,10 @@ bool MyServer::_isServerRun()
     return false;
 }
 
-void MyServer::_dispatch(const QString &data)
+QString MyServer::_dispatch(const QString &data)
 {
     qDebug() << QString("dispatch: %1").arg(data);
-
+    QString response = "N";
     QStringList list = data.split("|");
     bool ok;
     qint64 id = list.at(0).toLongLong(&ok, 36);
@@ -122,7 +122,7 @@ void MyServer::_dispatch(const QString &data)
         {
             throw QString ("消息%1传送了无效的键值").arg(data);
         }
-        this->core->onKeyDown(keycode);
+        response = this->core->onKeyDown(keycode);
     }
     else if (event == "KU")
     {
@@ -132,12 +132,13 @@ void MyServer::_dispatch(const QString &data)
         {
             throw QString ("消息%1传送了无效的键值").arg(data);
         }
-        this->core->onKeyUp(keycode);
+        response = this->core->onKeyUp(keycode);
     }
     else
     {
         throw QString ("无法识别的消息%1").arg(data);
     }
+    return response;
 }
 
 void MyServer::newConnection()
@@ -156,7 +157,12 @@ void MyServer::readyRead()
     data = in.readAll();
     try
     {
-        this->_dispatch(data);
+        QString response = this->_dispatch(data);
+        if (socket->isWritable())
+        {
+            socket->write(response.toLocal8Bit());
+            socket->flush();
+        }
     }
     catch(QString exception)
     {

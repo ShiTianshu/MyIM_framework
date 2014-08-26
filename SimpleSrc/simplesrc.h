@@ -15,9 +15,9 @@ public:
 
     // Implements
     virtual void initialize(const QMap< QString, QVariant > &envs);
-    virtual void add(Global::SrcEle *pe);
-    virtual void remove(uint id);
-    virtual void update(Global::SrcEle *pe);
+    virtual void add(Global::SrcEle *);
+    virtual void remove(uint);
+    virtual void update(Global::SrcEle *);
     virtual void find(QString key, QVector<Global::SrcEle> *pev);
     virtual void findOne(QString key, Global::SrcEle *pe);
 

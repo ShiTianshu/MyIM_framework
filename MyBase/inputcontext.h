@@ -20,8 +20,10 @@ public:
     InputContext(qint64 id);
     ~InputContext();
     qint64 id;              // 上下文id，对应进程。
+    uint keycode;
     char key;               // 当前的按键。
     bool keyPress;          // 当前按键是否是按下的。
+    uint keyFlags;          // 功能键标志位，用来判断ctrl,alt,shift,win(command)等等。
     QString composition;    // 当前编码。
     QVector< Global::SrcEle* > candidateList;  // 候选列表。
     QVector< Global::SrcEle* > originalMatched;// 原匹配，用于整句

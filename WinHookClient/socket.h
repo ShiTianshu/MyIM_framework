@@ -3,8 +3,8 @@
 
 #include "../MyBase/global.h"
 
-void SendKeyDown(int keycode, uint flags);
-void SendKeyUp(int keycode, uint flags);
+bool SendKeyDown(int keycode, uint flags);
+bool SendKeyUp(int keycode, uint flags);
 void RegisterClient();
 void UnregisterClient();
 void ChangePos(uint x, uint y);

@@ -58,17 +58,17 @@ void SimpleSrc::initialize(const QMap<QString, QVariant> &envs)
     }
 }
 
-void SimpleSrc::add(Global::SrcEle *pe)
+void SimpleSrc::add(Global::SrcEle*)
 {
 
 }
 
-void SimpleSrc::remove(uint id)
+void SimpleSrc::remove(uint)
 {
 
 }
 
-void SimpleSrc::update(Global::SrcEle *pe)
+void SimpleSrc::update(Global::SrcEle *)
 {
 
 }
@@ -103,7 +103,7 @@ void SimpleSrc::_loadTxtFile(QFile *pf)
     while(!stream.atEnd())
     {
         QString line = stream.readLine();
-        qDebug() << "line:" << line;
+//        qDebug() << "line:" << line;
         QStringList kv = line.trimmed().split("\t");
         if (kv.length() != 2)
         {
@@ -123,8 +123,8 @@ void SimpleSrc::_loadBinFile(QFile *pf)
     QDataStream stream(pf);
     stream >> this->words;
     stream >> this->indexs;
-    qDebug() << this->words;
-    qDebug() << this->indexs;
+//    qDebug() << this->words;
+//    qDebug() << this->indexs;
 }
 
 void SimpleSrc::_createBinFile(QFile *pf)

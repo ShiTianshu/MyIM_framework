@@ -17,6 +17,8 @@ void InputContext::resetKeys()
 {
     this->key = 0;
     this->keyPress = false;
+    this->keyFlags = 0;
+    this->keycode = 0;
 }
 
 void InputContext::resetInfos()

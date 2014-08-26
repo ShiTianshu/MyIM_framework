@@ -15,14 +15,18 @@
 #define UNKNOWN_MOD 'U'
 
 // 功能键的标志位。
-#define LCONTROL    1
-#define RCONTROL    2
-#define LSHIFT      4
-#define RSHIFT      8
-#define LMENU       16
-#define RMENU       32
-#define LWIN        64
-#define RWIN        128
+#define LCONTROL_FLAG    1
+#define RCONTROL_FLAG    2
+#define LSHIFT_FLAG      4
+#define RSHIFT_FLAG      8
+#define LMENU_FLAG       16
+#define RMENU_FLAG       32
+#define LSPECIAL_FLAG    64
+#define RSPECIAL_FLAG    128
+#define CONTROL_FLAG     LCONTROL_FLAG | RCONTROL_FLAG
+#define SHIFT_FLAG       LSHIFT_FLAG   | RSHIFT_FLAG
+#define MENU_FLAG        LMENU_FLAG    | RMENU_FLAG
+#define SPEC_FLAG        LSPECIAL_FLAG | RSPECIAL_FLAG
 
 namespace Global {
 
@@ -33,7 +37,7 @@ public:
     uint id;
     QString key;
     QString value;
-    int ext;                // 用作频率或者其它标识，或是其它数据的id等。
+    int ext;                // 用作频率或者其它标识，或是其它数据的id等。待定
     // Override operator << and >>.
     friend QDataStream &operator<<(QDataStream &out, const SrcEle &obj);
     friend QDataStream &operator>>(QDataStream &in, SrcEle &obj);
@@ -46,13 +50,6 @@ void SetSettingsCodec(QSettings* settings, QByteArray codec="UTF-8");
 bool SrcLessThan(const SrcEle &src1, const SrcEle &src2);
 
 // 通信数据生成。
-/**
- * @brief KeyData   生成按键的通信字符串。
- *                  功能键的标志位，在其自身按下时，可任意传入。
- * @param id
- * @param keycode   键值
- * @param press     是否是按下
- */
 QString KeyData(qint64 id, uint keycode, bool press,
                 bool lctrl, bool rctrl, bool lshift, bool rshift,
                 bool lmenu, bool rmenu, bool lwin, bool rwin);
@@ -61,13 +58,6 @@ QString PositionData(qint64, int x, int y);
 QString RegisterClientData(qint64 id);
 QString UnregisterClientData(qint64 id);
 QString ChangeClientData(qint64 id);
-
-/**
- * @brief ResponseData  服务器响应
- * @param accepted      是否处理该按键。
- * @param commitString  上屏的字符串
- * @param text          嵌入的编码
- */
 QString ResponseData(bool accepted, QString commitString, QString editText);
 
 // 输入法server返回响应。
@@ -77,7 +67,6 @@ typedef struct TagIMServerResponse
     QString commitString;
     QString editText;
 }IMServerResponse;
-
 void ParseResponseData(QString response, IMServerResponse &imres);
 
 }

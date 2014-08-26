@@ -30,8 +30,8 @@ public:
     void addFocusInProcList(QStringList procList);
     void addFocusOutProcList(QStringList procList);
 
-    void onKeyDown(uint key, InputContext* pic);
-    void onKeyUp(uint key, InputContext* pic);
+    void onKeyDown(uint keycode, InputContext* pic);
+    void onKeyUp(uint keycode, InputContext* pic);
     void onFocusIn(InputContext* pic);
     void onFocusOut(InputContext* pic);
 

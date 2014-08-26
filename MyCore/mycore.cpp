@@ -109,25 +109,56 @@ void MyCore::setCurrCtx(qint64 id)
     this->currCtx = it.value();
 }
 
-void MyCore::onKeyDown(uint key)
+QString MyCore::onKeyDown(uint key)
 {
-    qDebug() << this->currEngine->getName();
-    this->currEngine->onKeyDown(key, this->currCtx);
+    if (!this->currCtx)
+    {
+        return "N";
+    }
+    else
+    {
+        this->currEngine->onKeyDown(key, this->currCtx);
+        return Global::ResponseData(this->currCtx->accepted, this->currCtx->commitString, this->currCtx->editText);
+    }
 }
 
-void MyCore::onKeyUp(uint key)
+QString MyCore::onKeyUp(uint key)
 {
-    this->currEngine->onKeyUp(key, this->currCtx);
+    if (!this->currCtx)
+    {
+        return "N";
+    }
+    else
+    {
+        this->currEngine->onKeyUp(key, this->currCtx);
+        return Global::ResponseData(this->currCtx->accepted, this->currCtx->commitString, this->currCtx->editText);
+    }
 }
 
-void MyCore::onFocusIn()
+QString MyCore::onFocusIn()
 {
-    this->currEngine->onFocusIn(this->currCtx);
+    if (!this->currCtx)
+    {
+        return "N";
+    }
+    else
+    {
+        this->currEngine->onFocusIn(this->currCtx);
+        return Global::ResponseData(this->currCtx->accepted, this->currCtx->commitString, this->currCtx->editText);
+    }
 }
 
-void MyCore::onFocusOut()
+QString MyCore::onFocusOut()
 {
-    this->currEngine->onFocusOut(this->currCtx);
+    if (!this->currCtx)
+    {
+        return "N";
+    }
+    else
+    {
+        this->currEngine->onFocusOut(this->currCtx);
+        return Global::ResponseData(this->currCtx->accepted, this->currCtx->commitString, this->currCtx->editText);
+    }
 }
 
 InputContext *MyCore::getCurrCtx()

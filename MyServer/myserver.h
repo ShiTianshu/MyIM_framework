@@ -22,7 +22,7 @@ private:
     void _initSocket();
     bool _isServerRun();
 
-    void _dispatch(const QString &data);
+    QString _dispatch(const QString &data);
 
 private slots:
     void newConnection();

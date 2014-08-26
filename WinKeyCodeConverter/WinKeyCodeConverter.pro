@@ -1,22 +1,20 @@
 #-------------------------------------------------
 #
-# Project created by QtCreator 2014-08-25T13:46:30
+# Project created by QtCreator 2014-08-26T14:46:23
 #
 #-------------------------------------------------
 
-QT += core gui widgets
+QT       -= gui
 
-TARGET = SimpleUI
+TARGET = WinKeyCodeConverter
 TEMPLATE = lib
 
-DEFINES += SIMPLEUI_LIBRARY
+DEFINES += WINKEYCODECONVERTER_LIBRARY
 
-SOURCES += simpleui.cpp \
-    candidate.cpp
+SOURCES += winkeycodeconverter.cpp
 
-HEADERS += simpleui.h\
-        simpleui_global.h \
-    candidate.h
+HEADERS += winkeycodeconverter.h\
+        winkeycodeconverter_global.h
 
 unix {
     target.path = /usr/lib

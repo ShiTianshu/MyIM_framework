@@ -1,22 +1,20 @@
 #-------------------------------------------------
 #
-# Project created by QtCreator 2014-08-25T13:46:30
+# Project created by QtCreator 2014-08-26T13:12:22
 #
 #-------------------------------------------------
 
-QT += core gui widgets
+QT       -= gui
 
-TARGET = SimpleUI
+TARGET = DefaultComposer
 TEMPLATE = lib
 
-DEFINES += SIMPLEUI_LIBRARY
+DEFINES += DEFAULTCOMPOSER_LIBRARY
 
-SOURCES += simpleui.cpp \
-    candidate.cpp
+SOURCES += defaultcomposer.cpp
 
-HEADERS += simpleui.h\
-        simpleui_global.h \
-    candidate.h
+HEADERS += defaultcomposer.h\
+        defaultcomposer_global.h
 
 unix {
     target.path = /usr/lib

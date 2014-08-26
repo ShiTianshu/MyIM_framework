@@ -8,10 +8,10 @@ HINSTANCE gInstance;
 extern "C" LRESULT CALLBACK KbProc(int nCode, WPARAM wParam, LPARAM lParam)
 {
     PKBDLLHOOKSTRUCT pkdhs = (PKBDLLHOOKSTRUCT)lParam;
-    qDebug() << QString("wparam:%7, nCode:%1, vkCode:%2, dwExtraInfo:%3, scanCode:%4, time:%5, flags:%6")
-                .arg(nCode).arg(pkdhs->vkCode).arg(pkdhs->dwExtraInfo).arg(pkdhs->scanCode).arg(pkdhs->time).arg(pkdhs->flags).arg(wParam);
-    qDebug() << GetKeyState(VK_CONTROL) << "  ctrl  " << GetKeyState(VK_LCONTROL);
-    qDebug() << GetKeyState(VK_SHIFT) << "  shift  " << GetKeyState(VK_LSHIFT);
+//    qDebug() << QString("wparam:%7, nCode:%1, vkCode:%2, dwExtraInfo:%3, scanCode:%4, time:%5, flags:%6")
+//                .arg(nCode).arg(pkdhs->vkCode).arg(pkdhs->dwExtraInfo).arg(pkdhs->scanCode).arg(pkdhs->time).arg(pkdhs->flags).arg(wParam);
+//    qDebug() << GetKeyState(VK_CONTROL) << "  ctrl  " << GetKeyState(VK_LCONTROL);
+//    qDebug() << GetKeyState(VK_SHIFT) << "  shift  " << GetKeyState(VK_LSHIFT);
 
     if (pkdhs->flags & LLKHF_INJECTED)
     {
@@ -22,47 +22,56 @@ extern "C" LRESULT CALLBACK KbProc(int nCode, WPARAM wParam, LPARAM lParam)
     uint flags = 0;
     if (GetKeyState(VK_LCONTROL) < 0)
     {
-        flags |= LCONTROL;
+        flags |= LCONTROL_FLAG;
     }
     if (GetKeyState(VK_RCONTROL) < 0)
     {
-        flags |= RCONTROL;
+        flags |= RCONTROL_FLAG;
     }
     if (GetKeyState(VK_LSHIFT) < 0)
     {
-        flags |= VK_LSHIFT;
+        flags |= LSHIFT_FLAG;
     }
     if (GetKeyState(VK_RSHIFT) < 0)
     {
-        flags |= VK_RSHIFT;
+        flags |= RSHIFT_FLAG;
     }
     if (GetKeyState(VK_LMENU) < 0)
     {
-        flags |= VK_LMENU;
+        flags |= LMENU_FLAG;
     }
     if (GetKeyState(VK_RMENU) < 0)
     {
-        flags |= VK_RMENU;
+        flags |= RMENU_FLAG;
     }
     if (GetKeyState(VK_LWIN) < 0)
     {
-        flags |= VK_LWIN;
+        flags |= LSPECIAL_FLAG;
     }
     if (GetKeyState(VK_RWIN) < 0)
     {
-        flags |= VK_RWIN;
+        flags |= RSPECIAL_FLAG;
     }
 
+    bool accepted = false;
     if (pkdhs->flags & LLKHF_UP)
     {
-        SendKeyUp(pkdhs->vkCode, flags);
+        accepted = SendKeyUp(pkdhs->vkCode, flags);
     }
     else
     {
-        SendKeyDown(pkdhs->vkCode, flags);
+        accepted = SendKeyDown(pkdhs->vkCode, flags);
     }
+    qDebug() << accepted;
 
-    return CallNextHookEx(gHook, nCode, wParam, lParam);
+    if (accepted)
+    {
+        return 1;
+    }
+    else
+    {
+        return CallNextHookEx(gHook, nCode, wParam, lParam);
+    }
 }
 
 void HookKeyboard()

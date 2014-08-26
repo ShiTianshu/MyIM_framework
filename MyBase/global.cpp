@@ -57,19 +57,26 @@ bool SrcLessThan(const SrcEle &src1, const SrcEle &src2)
     return src1.key < src2.key;
 }
 
+/**
+ * @brief KeyData   生成按键的通信字符串。
+ *                  功能键的标志位，在其自身按下时，可任意传入。
+ * @param id
+ * @param keycode   键值
+ * @param press     是否是按下
+ */
 QString KeyData(qint64 id, uint keycode, bool press,
                 bool lctrl, bool rctrl, bool lshift, bool rshift,
                 bool lmenu, bool rmenu, bool lwin, bool rwin)
 {
     int flags = 0;
-    if (lctrl) flags |= LCONTROL;
-    if (rctrl) flags |= RCONTROL;
-    if (lshift) flags |= LSHIFT;
-    if (rshift) flags |= RSHIFT;
-    if (lmenu) flags |= LMENU;
-    if (rmenu) flags |= RMENU;
-    if (lwin) flags |= LWIN;
-    if (rwin) flags |= RWIN;
+    if (lctrl) flags |= LCONTROL_FLAG;
+    if (rctrl) flags |= RCONTROL_FLAG;
+    if (lshift) flags |= LSHIFT_FLAG;
+    if (rshift) flags |= RSHIFT_FLAG;
+    if (lmenu) flags |= LMENU_FLAG;
+    if (rmenu) flags |= RMENU_FLAG;
+    if (lwin) flags |= LSPECIAL_FLAG;
+    if (rwin) flags |= RSPECIAL_FLAG;
     if (press)
     {
         return QString("%1|KD%2%3").arg(QString::number(id, 36))
@@ -115,6 +122,12 @@ QString ChangeClientData(qint64 id)
     return QString("%1|CC").arg(QString::number(id, 36));
 }
 
+/**
+ * @brief ResponseData  服务器响应
+ * @param accepted      是否处理该按键。
+ * @param commitString  上屏的字符串
+ * @param text          嵌入的编码
+ */
 QString ResponseData(bool accepted, QString commitString, QString editText)
 {
     return QString("%1||%2||%3").arg(accepted?1:0).arg(commitString).arg(editText);
@@ -122,10 +135,19 @@ QString ResponseData(bool accepted, QString commitString, QString editText)
 
 void ParseResponseData(QString response, IMServerResponse &imres)
 {
-    QStringList list = response.split("||");
-    imres.accepted = list.at(0).toInt() ? true : false;
-    imres.commitString = list.at(1);
-    imres.editText = list.at(2);
+    if (response == "N")
+    {
+        imres.accepted = false;
+        imres.commitString = "";
+        imres.editText = "";
+    }
+    else
+    {
+        QStringList list = response.split("||");
+        imres.accepted = list.at(0).toInt() ? true : false;
+        imres.commitString = list.at(1);
+        imres.editText = list.at(2);
+    }
 }
 
 QString PositionData(qint64 id, int x, int y)

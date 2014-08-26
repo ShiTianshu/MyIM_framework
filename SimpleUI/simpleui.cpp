@@ -45,17 +45,23 @@ void SimpleUI::execute(InputContext *pic)
     {
         throw QString ("Candidate没有初始化。");
     }
-    pic->composition = "ivtd";
+    pic->composition = "jintian";
     this->pcand->setInputContext(pic);
     if (pic->key == 'A')
     {
         this->pcand->show();
+        if (this->pcand->isVisible())
+        {
+            this->pcand->repaint();
+        }
+        pic->accepted = false;
     }
     else
     {
         this->pcand->hide();
+        pic->accepted = true;
     }
-    //this->pcand->repaint();
+    qDebug() << pic->accepted << "accepted";
 }
 
 

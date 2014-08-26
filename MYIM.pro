@@ -6,4 +6,6 @@ SUBDIRS += \
     MyServer \
     SimpleSrc \
     WinHookClient \
-    SimpleUI
+    SimpleUI \
+    DefaultComposer \
+    WinKeyCodeConverter
