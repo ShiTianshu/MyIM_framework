@@ -14,9 +14,15 @@ public:
     ~Candidate();
     void setInputContext(InputContext *pic);
     // 显示参数
-    QBrush backgroundBrush;
-    QFont font;
-    QPen fontPen;
+    int shadowWidth;        // 阴影的边框宽度
+    int borderRadius;       // 边框的圆角
+    int borderPadding;      // 边框留空
+    QColor shadowColor;     // 阴影的颜色
+    QBrush backgroundBrush; // 背影颜色
+    QFont font;             // 字体
+    QPen fontPen;           // 默认前景色
+    QBrush currentBrush;    // 当前选项的背景色
+    QPen currentPen;        // 当前选项的前景色
 protected:
     void paintEvent(QPaintEvent *);
 private:
