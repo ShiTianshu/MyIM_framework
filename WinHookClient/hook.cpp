@@ -8,10 +8,10 @@ HINSTANCE gInstance;
 extern "C" LRESULT CALLBACK KbProc(int nCode, WPARAM wParam, LPARAM lParam)
 {
     PKBDLLHOOKSTRUCT pkdhs = (PKBDLLHOOKSTRUCT)lParam;
-//    qDebug() << QString("wparam:%7, nCode:%1, vkCode:%2, dwExtraInfo:%3, scanCode:%4, time:%5, flags:%6")
-//                .arg(nCode).arg(pkdhs->vkCode).arg(pkdhs->dwExtraInfo).arg(pkdhs->scanCode).arg(pkdhs->time).arg(pkdhs->flags).arg(wParam);
-//    qDebug() << GetKeyState(VK_CONTROL) << "  ctrl  " << GetKeyState(VK_LCONTROL);
-//    qDebug() << GetKeyState(VK_SHIFT) << "  shift  " << GetKeyState(VK_LSHIFT);
+    qDebug() << QString("wparam:%7, nCode:%1, vkCode:%2, dwExtraInfo:%3, scanCode:%4, time:%5, flags:%6")
+                .arg(nCode).arg(pkdhs->vkCode).arg(pkdhs->dwExtraInfo).arg(pkdhs->scanCode).arg(pkdhs->time).arg(pkdhs->flags).arg(wParam);
+    qDebug() << GetKeyState(VK_CONTROL) << "  ctrl  " << GetKeyState(VK_LCONTROL);
+    qDebug() << GetKeyState(VK_SHIFT) << "  shift  " << GetKeyState(VK_LSHIFT);
 
     if (pkdhs->flags & LLKHF_INJECTED)
     {
@@ -36,13 +36,10 @@ extern "C" LRESULT CALLBACK KbProc(int nCode, WPARAM wParam, LPARAM lParam)
     {
         flags |= RSHIFT_FLAG;
     }
-    if (GetKeyState(VK_LMENU) < 0)
+    if (pkdhs->flags & LLKHF_ALTDOWN)
     {
-        flags |= LMENU_FLAG;
-    }
-    if (GetKeyState(VK_RMENU) < 0)
-    {
-        flags |= RMENU_FLAG;
+        qDebug() << "alt";
+        flags |= MENU_FLAG;
     }
     if (GetKeyState(VK_LWIN) < 0)
     {

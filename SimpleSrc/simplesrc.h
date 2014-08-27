@@ -10,7 +10,7 @@
 class SIMPLESRCSHARED_EXPORT SimpleSrc: public ISrc
 {
 public:
-    SimpleSrc(QString id);
+    SimpleSrc();
     virtual ~SimpleSrc();
 
     // Implements
@@ -32,6 +32,6 @@ private:
     virtual void _createIndexs();
 };
 
-extern "C" SIMPLESRCSHARED_EXPORT SimpleSrc* GetInstance(QString modId);
+extern "C" SIMPLESRCSHARED_EXPORT SimpleSrc* GetInstance();
 
 #endif // SIMPLESRC_H

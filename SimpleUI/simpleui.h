@@ -11,7 +11,7 @@ class SIMPLEUISHARED_EXPORT SimpleUI: public IProc
 {
 
 public:
-    SimpleUI(QString id);
+    SimpleUI();
     virtual ~SimpleUI();
     virtual void initialize(const QMap<QString, QVariant> &envs);
     virtual void execute(InputContext *pic);
@@ -19,6 +19,6 @@ private:
     Candidate* pcand;
 };
 
-extern "C" SIMPLEUISHARED_EXPORT SimpleUI *GetInstance(QString modId);
+extern "C" SIMPLEUISHARED_EXPORT SimpleUI *GetInstance();
 
 #endif // SIMPLEUI_H

@@ -1,8 +1,8 @@
 #include "iact.h"
 #include "global.h"
 
-IAct::IAct(QString id):
-    IMod(id)
+IAct::IAct():
+    IMod()
 {
     this->type = ACT_MOD;
     this->name = "IAct";

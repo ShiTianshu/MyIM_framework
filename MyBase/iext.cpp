@@ -2,8 +2,8 @@
 
 #include "global.h"
 
-IExt::IExt(QString id):
-    IMod(id)
+IExt::IExt():
+    IMod()
 {
     this->type = EXT_MOD;
     this->name = "IExt";

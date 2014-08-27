@@ -1,10 +1,9 @@
 #include "imod.h"
 #include "global.h"
 
-IMod::IMod(QString id)
+IMod::IMod()
 {
     this->type = UNKNOWN_MOD;
-    this->id = id;
     this->name = "IMod";
 }
 
@@ -21,6 +20,11 @@ const QString &IMod::getId()
 const QString &IMod::getName()
 {
     return this->name;
+}
+
+void IMod::SetId(QString id)
+{
+    this->id = id;
 }
 
 QString IMod::getFullName()

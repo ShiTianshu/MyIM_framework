@@ -9,12 +9,12 @@ class DEFAULTCOMPOSERSHARED_EXPORT DefaultComposer:
 {
 
 public:
-    DefaultComposer(QString id);
+    DefaultComposer();
     virtual ~DefaultComposer();
     virtual void execute(InputContext *pic);
     virtual void initialize(const QMap<QString, QVariant> &);
 };
 
-extern "C" DEFAULTCOMPOSERSHARED_EXPORT DefaultComposer *GetInstance(QString modId);
+extern "C" DEFAULTCOMPOSERSHARED_EXPORT DefaultComposer *GetInstance();
 
 #endif // DEFAULTCOMPOSER_H

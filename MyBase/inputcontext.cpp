@@ -6,6 +6,7 @@ InputContext::InputContext(qint64 id)
 {
     this->id = id;
     qDebug() << QString("创建上下文，ID=%1").arg(this->id);
+    this->resetAll();
 }
 
 InputContext::~InputContext()
@@ -34,6 +35,7 @@ void InputContext::resetInfos()
     this->editText.clear();
     this->pageIndex = 0;
     this->accepted = false;
+    this->selectIndex = 0;
 }
 
 void InputContext::resetAll()

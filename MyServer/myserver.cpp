@@ -122,7 +122,12 @@ QString MyServer::_dispatch(const QString &data)
         {
             throw QString ("消息%1传送了无效的键值").arg(data);
         }
-        response = this->core->onKeyDown(keycode);
+        uint keyFlags = list.at(1).rightRef(2).toInt(&ok, 16);
+        if (!ok)
+        {
+            throw QString ("消息%1传送了无效的键值").arg(data);
+        }
+        response = this->core->onKeyDown(keycode, keyFlags);
     }
     else if (event == "KU")
     {
@@ -132,7 +137,12 @@ QString MyServer::_dispatch(const QString &data)
         {
             throw QString ("消息%1传送了无效的键值").arg(data);
         }
-        response = this->core->onKeyUp(keycode);
+        uint keyFlags = list.at(1).rightRef(2).toInt(&ok, 16);
+        if (!ok)
+        {
+            throw QString ("消息%1传送了无效的键值").arg(data);
+        }
+        response = this->core->onKeyUp(keycode, keyFlags);
     }
     else
     {
@@ -158,6 +168,7 @@ void MyServer::readyRead()
     try
     {
         QString response = this->_dispatch(data);
+        qDebug() << ">>" << response;
         if (socket->isWritable())
         {
             socket->write(response.toLocal8Bit());

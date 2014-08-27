@@ -17,7 +17,7 @@
 class IActGroup: public IAct
 {
 public:
-    IActGroup(QString id);
+    IActGroup();
     virtual ~IActGroup();
     virtual void executeGroup(QString arg, InputContext* pic) = 0;
 };

@@ -15,11 +15,12 @@ class IMod: public QObject
 {
     Q_OBJECT
 public:
-    IMod(QString id);
+    IMod();
     virtual ~IMod();
     virtual void initialize(const QMap< QString, QVariant > &) = 0;
     const QString &getId();
     const QString &getName();
+    void SetId(QString id);
     QString getFullName();
     const char &getType();
 
@@ -79,6 +80,6 @@ signals:
     void add(QString srcId, Global::SrcEle *pe);
 };
 
-typedef IMod* (*GetModInstance) (QString modId);
+typedef IMod* (*GetModInstance) ();
 
 #endif // IMOD_H

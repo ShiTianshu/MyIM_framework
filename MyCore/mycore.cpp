@@ -40,11 +40,12 @@ IMod* MyCore::_loadMod(const QString &modName, const QString &modId)
     {
         throw QString("模块%1缺少GetInstance函数").arg(modPath);
     }
-    IMod* pm = gmi(modId);
+    IMod* pm = gmi();
     if (!pm)
     {
         throw QString("无法创建模块实例%1").arg(modPath);
     }
+    pm->SetId(modId);
     qDebug() << QString("成功加载模块%1").arg(pm->getFullName());
     return pm;
 }
@@ -109,7 +110,7 @@ void MyCore::setCurrCtx(qint64 id)
     this->currCtx = it.value();
 }
 
-QString MyCore::onKeyDown(uint key)
+QString MyCore::onKeyDown(uint key, uint flags)
 {
     if (!this->currCtx)
     {
@@ -117,12 +118,13 @@ QString MyCore::onKeyDown(uint key)
     }
     else
     {
-        this->currEngine->onKeyDown(key, this->currCtx);
+        this->currEngine->onKeyDown(key, flags, this->currCtx);
+        qDebug() << "finish key down:" << this->currCtx->accepted;
         return Global::ResponseData(this->currCtx->accepted, this->currCtx->commitString, this->currCtx->editText);
     }
 }
 
-QString MyCore::onKeyUp(uint key)
+QString MyCore::onKeyUp(uint key, uint flags)
 {
     if (!this->currCtx)
     {
@@ -130,7 +132,8 @@ QString MyCore::onKeyUp(uint key)
     }
     else
     {
-        this->currEngine->onKeyUp(key, this->currCtx);
+        this->currEngine->onKeyUp(key, flags, this->currCtx);
+        qDebug() << "finish key up:" << this->currCtx->accepted;
         return Global::ResponseData(this->currCtx->accepted, this->currCtx->commitString, this->currCtx->editText);
     }
 }

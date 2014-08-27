@@ -30,13 +30,13 @@ static const int keyMap[256] = {
     0,0,0,0,0,0
 };
 
-WinKeyCodeConverter* GetInstance(QString modId)
+WinKeyCodeConverter* GetInstance()
 {
-    return new WinKeyCodeConverter(modId);
+    return new WinKeyCodeConverter;
 }
 
-WinKeyCodeConverter::WinKeyCodeConverter(QString modId):
-    IProc(modId)
+WinKeyCodeConverter::WinKeyCodeConverter():
+    IProc()
 {
     this->name = "WinKeyCodeConverter";
 }
@@ -71,7 +71,6 @@ void WinKeyCodeConverter::execute(InputContext *pic)
         pic->accepted = true;
         pic->key = key;
     }
-    qDebug() << (int)pic->key;
 }
 
 void WinKeyCodeConverter::initialize(const QMap<QString, QVariant> &)

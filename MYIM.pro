@@ -8,4 +8,5 @@ SUBDIRS += \
     WinHookClient \
     SimpleUI \
     DefaultComposer \
-    WinKeyCodeConverter
+    WinKeyCodeConverter \
+    TableTranslator

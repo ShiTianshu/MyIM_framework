@@ -3,12 +3,13 @@
 #include <QPainter>
 #include <QPen>
 #include <QDebug>
+#include <QStaticText>
 
 Candidate::Candidate(QWidget *parent) :
     QWidget(parent)
 {
-    this->setWindowFlags(Qt::FramelessWindowHint | Qt::WindowStaysOnTopHint | Qt::Tool);
     this->setAttribute(Qt::WA_TranslucentBackground);
+    this->setWindowFlags(Qt::FramelessWindowHint | Qt::Tool | Qt::WindowStaysOnTopHint);
     this->pic = 0;
 }
 
@@ -32,59 +33,56 @@ void Candidate::paintEvent(QPaintEvent *)
     }
     else
     {
-        pic->composition = "ivtd";
-        //获得这一页的候选。
-        int start = pic->pageIndex * 5;
-        QVector< QString > cands;   // 当前要显示的候选。
         QPainter painter(this);
         painter.setRenderHint(QPainter::Antialiasing);
-        // 计算内容的宽高。
-        cands.append("世界");cands.append("你好");
-        int len = pic->composition.size();
-        for (int i = start; i < pic->candidateList.size(); ++i)
+        QFontMetrics metrics(this->font);
+        int width = metrics.width(pic->composition);
+        int fontHeight = metrics.height();
+        // 获得需要显示的宽度
+        for (int i = 0; i < this->cands.size(); ++i)
         {
-            cands.append(pic->candidateList.at(i)->value);
-            int t = pic->candidateList.at(i)->value.size();
-            if (t > len) len = t;
+            int t = metrics.width(this->cands.at(i));
+            width = width > t ? width : t;
         }
-        int lineSpace = this->font.pointSize() / 5; // 行间距
-        int width = len * (this->font.pointSize() + lineSpace) + 2 * this->borderPadding;
-        int height = cands.size() * (this->font.pointSize() + lineSpace) + 2 * this->borderPadding;
-        if (this->width() - 2 * this->shadowWidth != width || this->height() - 2 * this->shadowWidth != height)
-        {
-            this->resize(2 * this->shadowWidth + width, 2 * this->shadowWidth + height);
-        }
-        // 画背景
+        width = width > this->minWidth ? width : this->minWidth;
+        int lineSpace = fontHeight / 3;
+        int height = fontHeight * (this->cands.size() + 1) + this->cands.size() * lineSpace;
+        width += 4 * this->borderPadding;
+        height += 2 * this->borderPadding;
+        resize(width + 2 * this->shadowWidth, height + 2 * this->shadowWidth);
         QPainterPath path;
         path.addRoundedRect(this->shadowWidth, this->shadowWidth,
-                            this->width() - 2 * this->shadowWidth,
-                            this->height()- 2 * this->shadowWidth,
+                            width,
+                            height,
                             this->borderRadius, this->borderRadius);
-        painter.setPen(this->backgroundBrush.color());
         painter.fillPath(path, this->backgroundBrush);
         // 画阴影
         for (int i = 1; i < this->shadowWidth; ++i)
         {
-            this->shadowColor.setAlpha(100 - (100 / this->shadowWidth) * i);
-            //QPen _shadow(QColor(this->shadowPen.color().red(), this->shadowPen.color().green(), this->shadowPen.color().blue(), 255 - (255 / this->shadowWidth) * i));
+            this->shadowColor.setAlpha(25 / i);
             path.addRoundedRect(this->shadowWidth - i, this->shadowWidth - i,
                                 this->width() - 2 * (this->shadowWidth - i),
                                 this->height()- 2 * (this->shadowWidth - i),
                                 this->borderRadius, this->borderRadius);
-            painter.setPen(QPen(QBrush(this->shadowColor), 2, Qt::SolidLine, Qt::RoundCap, Qt::RoundJoin));
+            painter.setPen(QPen(QBrush(this->shadowColor), 2));
             painter.drawPath(path);
         }
+        // 画编码
         painter.setFont(this->font);
+        painter.setPen(this->compPen);
+        painter.drawStaticText(this->borderPadding * 2 + this->shadowWidth,
+                               this->borderPadding + this->shadowWidth,
+                               QStaticText(pic->composition));
         painter.setPen(this->fontPen);
-        painter.drawText(QPoint(this->borderPadding , this->borderPadding),pic->composition);
-        //int currentPadding = this->font.pointSize() / 5; // 当前字体大小下的首选背景到字体的留空。
-        // 画候选
-        int y = this->borderPadding + this->font.pointSize() + lineSpace;
-        int x = this->borderPadding;
-        for (int i = 0; i < cands.size(); ++i)
+        // 候选
+        painter.setPen(this->currentPen);
+        int left = 2 * this->borderPadding + this->shadowWidth;
+        int top = this->borderPadding + this->shadowWidth;
+        for (int i = 0; i < this->cands.size(); ++i)
         {
-            painter.drawText(x, y, cands.at(i));
-            y += this->font.pointSize() + lineSpace;
+            top += lineSpace + fontHeight;
+            painter.drawStaticText(left, top, QStaticText(this->cands.at(i)));
+            if (!i)painter.setPen(this->fontPen);
         }
     }
 }

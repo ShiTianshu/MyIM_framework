@@ -18,7 +18,7 @@ class IAct:
         public IMod
 {
 public:
-    IAct(QString id);
+    IAct();
     virtual ~IAct();
     virtual void execute(InputContext* pic) = 0;
 };

@@ -14,7 +14,7 @@ class ISrc:
         public IMod
 {
 public:
-    ISrc(QString id);
+    ISrc();
     virtual ~ISrc();
 
     virtual void findOne(QString key, Global::SrcEle *pe) = 0;

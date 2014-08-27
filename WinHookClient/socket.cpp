@@ -53,6 +53,7 @@ bool SendKeyUp(int keycode, uint flags)
     if (gSocket && gSocket->isWritable())
     {
         QString data = Global::KeyData(gClientId, keycode, false, flags);
+        qDebug() << data;
         gSocket->write(data.toLocal8Bit());
         gSocket->flush();
         if (gSocket->waitForReadyRead())
@@ -73,6 +74,7 @@ bool SendKeyDown(int keycode, uint flags)
     if (gSocket && gSocket->isWritable())
     {
         QString data = Global::KeyData(gClientId, keycode, true, flags);
+        qDebug() << data;
         gSocket->write(data.toLocal8Bit());
         gSocket->flush();
         if (gSocket->waitForReadyRead())

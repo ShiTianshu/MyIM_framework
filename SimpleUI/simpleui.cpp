@@ -3,13 +3,13 @@
 #include <QColor>
 #include <QDebug>
 
-SimpleUI *GetInstance(QString modId)
+SimpleUI *GetInstance()
 {
-    return new SimpleUI(modId);
+    return new SimpleUI;
 }
 
-SimpleUI::SimpleUI(QString id):
-    IProc(id)
+SimpleUI::SimpleUI():
+    IProc()
 {
     this->name = "SimpleUI";
     this->pcand = 0;
@@ -50,6 +50,9 @@ void SimpleUI::initialize(const QMap<QString, QVariant> &envs)
     QString shadowColor = this->getIdConfig(envs, "shadowcolor").toString();
     pcand->shadowColor = QColor(shadowColor);
 
+    QString compColor = this->getIdConfig(envs, "compcolor").toString();
+    pcand->compPen = QPen(QColor(compColor));
+
     // 读取字体信息
     int fontSize = this->getIdConfig(envs, "fontsize").toInt();
     QString fontFamily = this->getIdConfig(envs, "fontfamily").toString();
@@ -58,6 +61,8 @@ void SimpleUI::initialize(const QMap<QString, QVariant> &envs)
     QString fontColor = this->getIdConfig(envs, "fontcolor").toString();
     pcand->fontPen = QPen(QColor(fontColor));
 
+    // 边框宽度
+    pcand->minWidth = this->getIdConfig(envs, "minwidth").toInt();
     pcand->show();
 }
 
@@ -69,21 +74,33 @@ void SimpleUI::execute(InputContext *pic)
         throw QString ("Candidate没有初始化。");
     }
     this->pcand->setInputContext(pic);
-    if (pic->keycode == 65)
+    if (!pic->composition.isEmpty())
     {
-        this->pcand->show();
+        qDebug() << "page index" << pic->pageIndex;
+        uint start = pic->pageIndex * 5;
+        pcand->cands.clear();
+        qDebug() << "start:" << start << "candsize:" << pic->candidateList.size();
+        for (int i = start; i < pic->candidateList.size(); ++i)
+        {
+            qDebug() << "add cand";
+            pcand->cands.append(QString("%1.%2").arg(i+1).arg(pic->candidateList.at(i).value));
+        }
+//        pcand->cands.append("1.测试内容很长的时候，效果怎么样。我很长啊我很长。");
+//        pcand->cands.append("2.你好");
+        qDebug() << pcand->cands;
         if (this->pcand->isVisible())
         {
-            this->pcand->repaint();
+            this->pcand->update();
         }
-        pic->accepted = false;
+        else
+        {
+            this->pcand->show();
+        }
     }
     else
     {
         this->pcand->hide();
-        pic->accepted = true;
     }
-    qDebug() << pic->accepted << "accepted";
 }
 
 

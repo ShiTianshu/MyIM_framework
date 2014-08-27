@@ -24,8 +24,8 @@ public:
     virtual void setCurrCtx(qint64 id);
 
     // 事件相关
-    virtual QString onKeyDown(uint key);
-    virtual QString onKeyUp(uint key);
+    virtual QString onKeyDown(uint key, uint flags);
+    virtual QString onKeyUp(uint key, uint flags);
     virtual QString onFocusIn();
     virtual QString onFocusOut();
 

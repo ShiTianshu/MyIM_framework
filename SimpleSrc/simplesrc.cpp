@@ -5,13 +5,13 @@
 #include <QFile>
 #include <QDataStream>
 
-SimpleSrc* GetInstance(QString modId)
+SimpleSrc* GetInstance()
 {
-    return new SimpleSrc(modId);
+    return new SimpleSrc;
 }
 
-SimpleSrc::SimpleSrc(QString id):
-    ISrc(id)
+SimpleSrc::SimpleSrc():
+    ISrc()
 {
     this->name = "SimpleSrc";
 }
@@ -79,7 +79,8 @@ void SimpleSrc::find(QString key, QVector<Global::SrcEle> *pev)
     if (it != this->indexs.end())
     {
         quint32 idx = it.value() / 10000;
-        for (quint32 i = 0; i < it.value() % 10000; ++it)
+        quint32 count = it.value() % 10000;
+        for (quint32 i = 0; i < count; ++i)
         {
             pev->append(this->words.at(idx + i));
         }
@@ -123,8 +124,8 @@ void SimpleSrc::_loadBinFile(QFile *pf)
     QDataStream stream(pf);
     stream >> this->words;
     stream >> this->indexs;
-//    qDebug() << this->words;
-//    qDebug() << this->indexs;
+    qDebug() << this->words;
+    qDebug() << this->indexs;
 }
 
 void SimpleSrc::_createBinFile(QFile *pf)

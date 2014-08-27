@@ -16,7 +16,7 @@ class IProc:
         public IMod
 {
 public:
-    IProc(QString id);
+    IProc();
     virtual ~IProc();
     virtual void execute(InputContext* pic)=0;
 };

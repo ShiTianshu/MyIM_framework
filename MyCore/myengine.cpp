@@ -181,13 +181,14 @@ void MyEngine::toAction(QString actionId)
 }
 
 
-void MyEngine::onKeyDown(uint keycode, InputContext *pic)
+void MyEngine::onKeyDown(uint keycode, uint keyFlags, InputContext *pic)
 {
     if (pic)
     {
         // 设置键值
         pic->keycode = keycode;
         pic->keyPress = true;
+        pic->keyFlags = keyFlags;
         // 调用链
         QVector< IProc* >::iterator it;
         for (it = this->keyDownProcList.begin();
@@ -199,7 +200,7 @@ void MyEngine::onKeyDown(uint keycode, InputContext *pic)
 }
 
 
-void MyEngine::onKeyUp(uint keycode, InputContext *pic)
+void MyEngine::onKeyUp(uint keycode, uint keyFlags, InputContext *pic)
 {
 
     if (pic)
@@ -207,6 +208,7 @@ void MyEngine::onKeyUp(uint keycode, InputContext *pic)
         // 设置键值
         pic->keycode = keycode;
         pic->keyPress = false;
+        pic->keyFlags = keyFlags;
         // 调用链
         QVector< IProc* >::iterator it;
         for (it = this->keyUpProcList.begin();

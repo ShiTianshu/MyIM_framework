@@ -23,6 +23,9 @@ public:
     QPen fontPen;           // 默认前景色
     QBrush currentBrush;    // 当前选项的背景色
     QPen currentPen;        // 当前选项的前景色
+    QPen compPen;           // 编码颜色
+    QVector< QString > cands;
+    int minWidth;
 protected:
     void paintEvent(QPaintEvent *);
 private:

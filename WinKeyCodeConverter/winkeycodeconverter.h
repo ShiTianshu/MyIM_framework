@@ -9,11 +9,11 @@ class WINKEYCODECONVERTERSHARED_EXPORT WinKeyCodeConverter:
         public IProc
 {
 public:
-    WinKeyCodeConverter(QString modId);
+    WinKeyCodeConverter();
     virtual ~WinKeyCodeConverter();
     virtual void execute(InputContext *pic);
     virtual void initialize(const QMap<QString, QVariant> &);
 };
 
-extern "C" WINKEYCODECONVERTERSHARED_EXPORT WinKeyCodeConverter* GetInstance(QString modId);
+extern "C" WINKEYCODECONVERTERSHARED_EXPORT WinKeyCodeConverter* GetInstance();
 #endif // WINKEYCODECONVERTER_H

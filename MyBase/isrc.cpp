@@ -1,7 +1,7 @@
 #include "isrc.h"
 
-ISrc::ISrc(QString id):
-    IMod(id)
+ISrc::ISrc():
+    IMod()
 {
     this->type = SRC_MOD;
     this->name = "ISrc";
