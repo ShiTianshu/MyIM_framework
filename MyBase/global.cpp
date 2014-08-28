@@ -37,7 +37,8 @@ void SetSettingsCodec(QSettings *settings, QByteArray codec)
     settings->setIniCodec(QTextCodec::codecForName(codec));
 }
 
-QDataStream &operator<<(QDataStream &out, const SrcEle &obj) {
+QDataStream &operator<<(QDataStream &out, const SrcEle &obj)
+{
     out << obj.id << obj.key << obj.value << obj.ext;
     return out;
 }

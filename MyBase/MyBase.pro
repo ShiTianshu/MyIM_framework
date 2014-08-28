@@ -30,7 +30,8 @@ HEADERS += \
     isrc.h \
     iactgroup.h \
     inputcontext.h \
-    iext.h
+    iext.h \
+    comm.h
 unix {
     target.path = /usr/lib
     INSTALLS += target

@@ -5,8 +5,10 @@
 #include <QMessageBox>
 #include <QLocalServer>
 
+
 int main(int argc, char *argv[])
 {
+    qDebug() << "server start";
     QApplication a(argc, argv);
     MyServer server;
     try

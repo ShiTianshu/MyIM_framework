@@ -31,7 +31,7 @@ void TableTranslator::execute(InputContext *pic)
     if (pic->composition.length() > this->maxCodeLen)
     {
         // 顶屏
-        QString comp = pic->composition.left(1);
+        QString comp = pic->composition.right(1);
         emit action("basics#push");
         pic->composition = comp;
     }
