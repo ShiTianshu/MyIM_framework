@@ -113,6 +113,15 @@ QString MyServer::_dispatch(const QString &data)
     else if (event == "PS")
     {
         // 位置
+        QString posstr = list.at(1).mid(2);
+        QStringList posli = posstr.split(",");
+        if (posli.size() != 2)
+        {
+            throw QString ("无效的光标位置");
+        }
+        int x = posli.at(0).toInt();
+        int y = posli.at(1).toInt();
+        response = this->core->onPosChange(x, y);
     }
     else if (event == "KD")
     {

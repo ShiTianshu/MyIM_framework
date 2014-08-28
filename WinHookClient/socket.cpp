@@ -1,10 +1,29 @@
 #include "socket.h"
+#include "sender.h"
+#include "caret.h"
 #include <QLocalSocket>
 #include <QDateTime>
 #include <QTextStream>
 
 QLocalSocket* gSocket;
 qint64 gClientId = 0;
+
+void _SendPos()
+{
+    if (gSocket && gSocket->isWritable())
+    {
+        POINT pos;
+        FillPos(pos);
+        QString data = Global::PositionData(gClientId, pos.x, pos.y);
+        gSocket->write(data.toLocal8Bit());
+        gSocket->flush();
+        if (gSocket->waitForReadyRead())
+        {
+            QTextStream in(gSocket);
+            in.readAll();
+        }
+    }
+}
 
 void RegisterClient()
 {
@@ -50,6 +69,7 @@ void UnregisterClient()
 
 bool SendKeyUp(int keycode, uint flags)
 {
+    _SendPos();
     if (gSocket && gSocket->isWritable())
     {
         QString data = Global::KeyData(gClientId, keycode, false, flags);
@@ -62,15 +82,21 @@ bool SendKeyUp(int keycode, uint flags)
             QString response = in.readAll();
             Global::IMServerResponse imres;
             Global::ParseResponseData(response, imres);
+            if (!imres.commitString.isEmpty())
+            {
+                SendString(imres.commitString);
+            }
             return imres.accepted;
         }
     }
+    _SendPos();
     return false;
 }
 
 
 bool SendKeyDown(int keycode, uint flags)
 {
+    _SendPos();
     if (gSocket && gSocket->isWritable())
     {
         QString data = Global::KeyData(gClientId, keycode, true, flags);
@@ -83,9 +109,14 @@ bool SendKeyDown(int keycode, uint flags)
             QString response = in.readAll();
             Global::IMServerResponse imres;
             Global::ParseResponseData(response, imres);
+            if (!imres.commitString.isEmpty())
+            {
+                SendString(imres.commitString);
+            }
             return imres.accepted;
         }
     }
+    _SendPos();
     return false;
 }
 

@@ -23,7 +23,6 @@ SimpleSrc::~SimpleSrc()
 
 void SimpleSrc::initialize(const QMap<QString, QVariant> &envs)
 {
-    qDebug() << "SimpleSrc初始化";
     // file属性为码表名称。
     QString fileName = this->getIdConfig(envs, "file").toString();
     if (fileName.isEmpty())
@@ -56,6 +55,8 @@ void SimpleSrc::initialize(const QMap<QString, QVariant> &envs)
         this->_createBinFile(&binFile);
         binFile.close();
     }
+    qDebug() << this->words;
+    qDebug() << this->indexs;
 }
 
 void SimpleSrc::add(Global::SrcEle*)
@@ -124,8 +125,6 @@ void SimpleSrc::_loadBinFile(QFile *pf)
     QDataStream stream(pf);
     stream >> this->words;
     stream >> this->indexs;
-    qDebug() << this->words;
-    qDebug() << this->indexs;
 }
 
 void SimpleSrc::_createBinFile(QFile *pf)

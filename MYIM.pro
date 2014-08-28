@@ -9,4 +9,5 @@ SUBDIRS += \
     SimpleUI \
     DefaultComposer \
     WinKeyCodeConverter \
-    TableTranslator
+    TableTranslator \
+    Basics

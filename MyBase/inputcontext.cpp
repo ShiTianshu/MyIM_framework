@@ -26,15 +26,12 @@ void InputContext::resetInfos()
 {
     this->candidateList.clear();
     this->caretPos = QPoint(0, 0);
-    this->commitString.clear();
     this->compIndex = 0;
     this->composition.clear();
     this->currentMatched.clear();
     this->extInfo.clear();
     this->originalMatched.clear();
-    this->editText.clear();
     this->pageIndex = 0;
-    this->accepted = false;
     this->selectIndex = 0;
 }
 
@@ -42,4 +39,11 @@ void InputContext::resetAll()
 {
     this->resetKeys();
     this->resetInfos();
+    this->resetResponse();
+}
+
+void InputContext::resetResponse()
+{
+    this->commitString.clear();
+    this->editText.clear();
 }

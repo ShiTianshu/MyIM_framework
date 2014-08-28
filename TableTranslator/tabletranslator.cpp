@@ -19,25 +19,34 @@ TableTranslator::~TableTranslator()
 
 void TableTranslator::execute(InputContext *pic)
 {
-    if (!pic->key)
+    if (!pic)
+    {
+        throw QString ("DefaultComposer没有找到上下文");
+    }
+    if (pic->composition.isEmpty())
     {
         // 跳过模块
         return;
     }
-    qDebug() << "translator begin";
-    pic->candidateList.clear();
-    if (pic->composition.length() > 5)
+    if (pic->composition.length() > this->maxCodeLen)
     {
         // 顶屏
-        pic->composition = pic->composition.left(1);
+        QString comp = pic->composition.left(1);
+        emit action("basics#push");
+        pic->composition = comp;
     }
+    pic->candidateList.clear();
     QVector< Global::SrcEle > v;
     emit find("tablesrc", pic->composition, &v);
     if (!v.isEmpty())
     {
         pic->candidateList += v;
     }
-    qDebug() << pic->candidateList.size();
+    if (pic->composition.length() >= this->maxCodeLen &&
+            pic->candidateList.size() == 1)
+    {
+        emit action("basics#push");
+    }
 }
 
 void TableTranslator::initialize(const QMap<QString, QVariant> &envs)

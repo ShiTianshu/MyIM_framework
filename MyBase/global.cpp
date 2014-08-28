@@ -152,9 +152,7 @@ void ParseResponseData(QString response, IMServerResponse &imres)
 
 QString PositionData(qint64 id, int x, int y)
 {
-    return QString("%1|%2,%3").arg(QString::number(id, 36)).arg(x).arg(y);
+    return QString("%1|PS%2,%3").arg(QString::number(id, 36)).arg(x).arg(y);
 }
-
-
 
 }

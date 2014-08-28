@@ -21,7 +21,7 @@ public:
     ~InputContext();
     qint64 id;              // 上下文id，对应进程。
     uint keycode;
-    int key;               // 当前的按键。
+    int key;                // 当前的按键
     bool keyPress;          // 当前按键是否是按下的。
     uint keyFlags;          // 功能键标志位，用来判断ctrl,alt,shift,win(command)等等。
     QString composition;    // 当前编码。
@@ -38,8 +38,9 @@ public:
     bool accepted;          // 是否处理了按键。如果处理了就吃掉。
 
     void resetKeys();       // 清空按键
-    void resetInfos();      // 清空除按键外的全部
+    void resetInfos();      // 清空信息
     void resetAll();        // 清空全部
+    void resetResponse();   // 清空响应
 };
 
 #endif // INPUTCONTEXT_H

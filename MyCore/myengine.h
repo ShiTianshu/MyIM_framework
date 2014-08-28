@@ -29,11 +29,14 @@ public:
     void addKeyUpProcList(QStringList procList);
     void addFocusInProcList(QStringList procList);
     void addFocusOutProcList(QStringList procList);
+    void addUiProcList(QStringList procList);
 
     void onKeyDown(uint keycode, uint keyFlags, InputContext* pic);
     void onKeyUp(uint keycode, uint keyFlags, InputContext* pic);
     void onFocusIn(InputContext* pic);
     void onFocusOut(InputContext* pic);
+    void onPosChange(int x, int y, InputContext* pic);
+    void _uiProcInvoke(InputContext *pic);
 
 private:
     QString name;
@@ -42,6 +45,7 @@ private:
     QVector< IProc* > keyUpProcList;
     QVector< IProc* > focusInProcList;
     QVector< IProc* > focusOutProcList;
+    QVector< IProc* > uiProcList;
 
     // 核心实例，用于获取当前的上下文
     MyCore* core;
@@ -55,6 +59,7 @@ private:
     void _addKeyUpProc(IProc* iproc);
     void _addFocusInProc(IProc* iproc);
     void _addFocusOutProc(IProc* iproc);
+    void _addUiProc(IProc* iproc);
 
 public slots:
     void toAction(QString actionId);

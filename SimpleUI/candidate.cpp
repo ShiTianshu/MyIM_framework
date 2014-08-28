@@ -33,6 +33,11 @@ void Candidate::paintEvent(QPaintEvent *)
     }
     else
     {
+        QPoint pos = pic->caretPos;
+        if (pos.x() != 0 || pos.y() !=0)
+        {
+            this->move(pos);
+        }
         QPainter painter(this);
         painter.setRenderHint(QPainter::Antialiasing);
         QFontMetrics metrics(this->font);

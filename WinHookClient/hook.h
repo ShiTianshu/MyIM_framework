@@ -3,8 +3,10 @@
 
 #include "windows.h"
 
+
 extern "C" LRESULT CALLBACK KbProc(int nCode, WPARAM wParam, LPARAM lParam);
 void HookKeyboard();
 void UnhookKeyboard();
+
 
 #endif // HOOK_H

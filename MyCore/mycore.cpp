@@ -164,6 +164,19 @@ QString MyCore::onFocusOut()
     }
 }
 
+QString MyCore::onPosChange(int x, int y)
+{
+    if (!this->currCtx)
+    {
+        return "N";
+    }
+    else
+    {
+        this->currEngine->onPosChange(x, y, this->currCtx);
+        return Global::ResponseData(this->currCtx->accepted, this->currCtx->commitString, this->currCtx->editText);
+    }
+}
+
 InputContext *MyCore::getCurrCtx()
 {
     return this->currCtx;
@@ -225,6 +238,7 @@ void MyCore::_loadEngine(const QString & name, const QString & engine)
     pe->addKeyUpProcList(cfg.value("keyup").toStringList());
     pe->addFocusInProcList(cfg.value("focusin").toStringList());
     pe->addFocusOutProcList(cfg.value("focusout").toStringList());
+    pe->addUiProcList(cfg.value("ui").toStringList());
     cfg.endGroup();
     // 如果没有currEngine则赋值
     if (!this->currEngine)

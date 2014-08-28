@@ -126,6 +126,20 @@ void MyEngine::addFocusOutProcList(QStringList procList)
     }
 }
 
+void MyEngine::addUiProcList(QStringList procList)
+{
+    foreach (QString k, procList)
+    {
+        if (k.isEmpty()) break;
+        QMap< QString, IMod* >::iterator it = this->mods.find(k);
+        if (it == this->mods.end())
+        {
+            throw QString("ui事件响应中调用的模块%1未定义").arg(k);
+        }
+        this->_addUiProc((IProc*)it.value());
+    }
+}
+
 void MyEngine::findOne(QString srcId, QString key, Global::SrcEle *pe)
 {
     ISrc* ps = this->_getSrc(srcId);
@@ -165,12 +179,14 @@ void MyEngine::toAction(QString actionId)
         // action group调用
         QStringList tmp = actionId.split("#");
         IAct* pa = this->_getAct(tmp.at(0));
-        if (typeid(pa) != typeid(IActGroup*))
+        if (IActGroup *pag = dynamic_cast< IActGroup* >(pa))
+        {
+            pag->executeGroup(tmp.at(1), pic);
+        }
+        else
         {
             throw QString("模块%1不是ActGroup").arg(pa->getFullName());
         }
-        IActGroup* pag = (IActGroup*) pa;
-        pag->executeGroup(tmp.at(1), pic);
     }
     else
     {
@@ -189,6 +205,7 @@ void MyEngine::onKeyDown(uint keycode, uint keyFlags, InputContext *pic)
         pic->keycode = keycode;
         pic->keyPress = true;
         pic->keyFlags = keyFlags;
+        pic->resetResponse();
         // 调用链
         QVector< IProc* >::iterator it;
         for (it = this->keyDownProcList.begin();
@@ -197,18 +214,19 @@ void MyEngine::onKeyDown(uint keycode, uint keyFlags, InputContext *pic)
             ((IProc*)*it)->execute(pic);
         }
     }
+    this->_uiProcInvoke(pic);
 }
 
 
 void MyEngine::onKeyUp(uint keycode, uint keyFlags, InputContext *pic)
 {
-
     if (pic)
     {
         // 设置键值
         pic->keycode = keycode;
         pic->keyPress = false;
         pic->keyFlags = keyFlags;
+        pic->resetResponse();
         // 调用链
         QVector< IProc* >::iterator it;
         for (it = this->keyUpProcList.begin();
@@ -217,25 +235,57 @@ void MyEngine::onKeyUp(uint keycode, uint keyFlags, InputContext *pic)
             ((IProc*)*it)->execute(pic);
         }
     }
+    this->_uiProcInvoke(pic);
 }
 
 
 void MyEngine::onFocusIn(InputContext *pic)
 {
-    QVector< IProc* >::iterator it;
-    for (it = this->focusInProcList.begin();
-         it != this->focusInProcList.end(); ++it)
+    if (pic)
     {
-        ((IProc*)*it)->execute(pic);
+        pic->resetResponse();
+        QVector< IProc* >::iterator it;
+        for (it = this->focusInProcList.begin();
+             it != this->focusInProcList.end(); ++it)
+        {
+            ((IProc*)*it)->execute(pic);
+        }
+        this->_uiProcInvoke(pic);
     }
 }
 
 
 void MyEngine::onFocusOut(InputContext *pic)
 {
+    if (pic)
+    {
+        pic->resetResponse();
+        QVector< IProc* >::iterator it;
+        for (it = this->focusOutProcList.begin();
+             it != this->focusOutProcList.end(); ++it)
+        {
+            ((IProc*)*it)->execute(pic);
+        }
+        this->_uiProcInvoke(pic);
+    }
+}
+
+void MyEngine::onPosChange(int x, int y, InputContext *pic)
+{
+    if (pic)
+    {
+        pic->caretPos.setX(x);
+        pic->caretPos.setY(y);
+        pic->resetResponse();
+        this->_uiProcInvoke(pic);
+    }
+}
+
+void MyEngine::_uiProcInvoke(InputContext *pic)
+{
     QVector< IProc* >::iterator it;
-    for (it = this->focusOutProcList.begin();
-         it != this->focusOutProcList.end(); ++it)
+    for (it = this->uiProcList.begin();
+         it != this->uiProcList.end(); ++it)
     {
         ((IProc*)*it)->execute(pic);
     }
@@ -291,6 +341,11 @@ void MyEngine::_addFocusInProc(IProc* iproc)
 void MyEngine::_addFocusOutProc(IProc* iproc)
 {
     this->focusOutProcList.append(iproc);
+}
+
+void MyEngine::_addUiProc(IProc *iproc)
+{
+    this->uiProcList.append(iproc);
 }
 
 

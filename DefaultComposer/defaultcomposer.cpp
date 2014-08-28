@@ -20,8 +20,11 @@ DefaultComposer::~DefaultComposer()
 
 void DefaultComposer::execute(InputContext *pic)
 {
-    qDebug() << "default composer invoked, key:" << pic->key;
-    qDebug() << "flags:" << pic->keyFlags;
+    if (!pic)
+    {
+        throw QString ("DefaultComposer没有找到上下文");
+    }
+    qDebug() << "DefaultComposer begin ----------" << pic->key;
     if (pic->key == 0) return;
     // 只处理键按下的事件。
     if (pic->keyPress)
@@ -29,25 +32,21 @@ void DefaultComposer::execute(InputContext *pic)
         // 如果是ctrl, alt, shift, win放行
         if (((pic->keyFlags) & (CONTROL_FLAG)) != 0)
         {
-            qDebug() << "ctrl down";
             pic->accepted = false;
             pic->key = 0;
         }
         else if (((pic->keyFlags) & (MENU_FLAG)) != 0)
         {
-            qDebug() << "menu down";
             pic->accepted = false;
             pic->key = 0;
         }
         else if (((pic->keyFlags) & (SHIFT_FLAG)) != 0)
         {
-            qDebug() << "shift down";
             pic->accepted = false;
             pic->key = 0;
         }
         else if (((pic->keyFlags) & (SPECIAL_FLAG)) != 0)
         {
-            qDebug() << "spec down";
             pic->accepted = false;
             pic->key = 0;
         }
@@ -59,12 +58,108 @@ void DefaultComposer::execute(InputContext *pic)
             pic->accepted = false;
             pic->key = 0;
         }
-        else
+        else if (pic->key >= Qt::Key_A && pic->key <= Qt::Key_Z)
         {
-            qDebug() << "accepted";
             pic->accepted = true;
             pic->composition += QChar(pic->key).toLower();
-            //qDebug() << pic->key;
+        }
+        else if (pic->key == Qt::Key_Semicolon)
+        {
+            pic->accepted = true;
+            pic->composition += ';';
+        }
+        else if (pic->key == Qt::Key_Comma ||
+                 pic->key == Qt::Key_Period ||
+                 pic->key == Qt::Key_Apostrophe ||
+                 pic->key == Qt::Key_Minus ||
+                 pic->key == Qt::Key_Plus ||
+                 pic->key == Qt::Key_Backslash ||
+                 pic->key == Qt::Key_Slash ||
+                 pic->key == Qt::Key_BracketLeft ||
+                 pic->key == Qt::Key_BraceRight ||
+                 pic->key == Qt::Key_QuoteLeft)
+        {
+            if (!pic->candidateList.isEmpty())
+            {
+                emit action("basics#push");
+            }
+            pic->accepted = false;
+            pic->key = 0;
+        }
+        else if (pic->key >= Qt::Key_0 && pic->key <= Qt::Key_9)
+        {
+            if (pic->key == Qt::Key_0)
+            {
+                qDebug() << "数字键0";
+                if (pic->composition.isEmpty())
+                {
+                    pic->accepted = false;
+                    pic->key = 0;
+                }
+                else
+                {
+                    emit action("basics#clear");
+                }
+            }
+            else
+            {
+                qDebug() << "数字键1-9键选" << pic->key - Qt::Key_1;
+                emit action(QString("basics#select%1").arg(pic->key - Qt::Key_1));
+            }
+        }
+        else if (pic->key == Qt::Key_Space)
+        {
+            if (pic->composition.isEmpty())
+            {
+                pic->accepted = false;
+                pic->key = 0;
+            }
+            else
+            {
+                emit action("basics#select0");
+            }
+        }
+        else if (pic->key == Qt::Key_Escape)
+        {
+            if (pic->composition.isEmpty())
+            {
+                pic->accepted = false;
+                pic->key = 0;
+            }
+            else
+            {
+                emit action("basics#clear");
+            }
+        }
+        else if (pic->key == Qt::Key_Backspace)
+        {
+            qDebug() << "backspace ----- ";
+            if (pic->composition.isEmpty())
+            {
+                pic->accepted = false;
+                pic->key = 0;
+            }
+            else
+            {
+                emit action("basics#back");
+            }
+        }
+        else if (pic->key == Qt::Key_Return)
+        {
+            if (pic->composition.isEmpty())
+            {
+                pic->accepted = false;
+                pic->key = 0;
+            }
+            else
+            {
+                emit action("basics#sendcomp");
+            }
+        }
+        else
+        {
+            pic->accepted = false;
+            pic->key = 0;
         }
     }
     else

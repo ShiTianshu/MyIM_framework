@@ -15,9 +15,12 @@ LIBS += -L $$(MYIM_HOME)/lib -lMyBase
 
 SOURCES += main.cpp\
         hook.cpp \
-    socket.cpp
+    socket.cpp \
+    sender.cpp
 
 HEADERS  += hook.h \
-    socket.h
+    socket.h \
+    sender.h \
+    caret.h
 
 DESTDIR = $$(MYIM_HOME)/bin

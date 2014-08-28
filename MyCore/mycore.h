@@ -28,6 +28,7 @@ public:
     virtual QString onKeyUp(uint key, uint flags);
     virtual QString onFocusIn();
     virtual QString onFocusOut();
+    virtual QString onPosChange(int x, int y);
 
     // 当前的InputContext是变换的，用于将其动态的传给engine
     InputContext *getCurrCtx();
@@ -46,7 +47,6 @@ private:
     virtual void _loadIncludeConfig(const QStringList & includeList);
 
     void _initEngines();
-
 };
 
 typedef MyCore* (*GetCoreInstance) ();
