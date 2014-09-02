@@ -4,6 +4,13 @@
 #include <QDebug>
 #include <QFile>
 #include <QDataStream>
+#include <QTextCodec>
+
+
+bool SrcLessThan(const Global::SrcItem &item1, const Global::SrcItem &item2)
+{
+    return item1.key < item2.key;
+}
 
 SimpleSrc* GetInstance()
 {
@@ -76,6 +83,7 @@ void SimpleSrc::update(Global::SrcEle *)
 
 void SimpleSrc::find(QString key, QVector<Global::SrcEle> *pev)
 {
+    // 检索精确对应的
     QHash< QString, quint32 >::iterator it = this->indexs.find(key);
     if (it != this->indexs.end())
     {
@@ -86,6 +94,8 @@ void SimpleSrc::find(QString key, QVector<Global::SrcEle> *pev)
             pev->append(this->words.at(idx + i));
         }
     }
+    // 检索以此开头的
+
 }
 
 void SimpleSrc::findOne(QString key, Global::SrcEle *pe)
@@ -101,18 +111,19 @@ void SimpleSrc::findOne(QString key, Global::SrcEle *pe)
 void SimpleSrc::_loadTxtFile(QFile *pf)
 {
     QTextStream stream(pf);
-
+    QTextCodec *codec = QTextCodec::codecForName("UTF-8");
     while(!stream.atEnd())
     {
+        //QString line = codec->toUnicode(stream.readLine().toLocal8Bit());
         QString line = stream.readLine();
-//        qDebug() << "line:" << line;
         QStringList kv = line.trimmed().split("\t");
-        if (kv.length() != 2)
+        if (kv.length() < 2)
         {
-            throw QString("无效的编码格式。");
+            throw QString("无效的编码格式。%1").arg(line);
         }
         Global::SrcEle src;
         src.key = kv.at(1);
+        //src.key = codec->toUnicode(kv.at(1).toLocal8Bit());
         src.value = kv.at(0);
         this->words.append(src);
     }

@@ -37,25 +37,28 @@ void SetSettingsCodec(QSettings *settings, QByteArray codec)
     settings->setIniCodec(QTextCodec::codecForName(codec));
 }
 
-QDataStream &operator<<(QDataStream &out, const SrcEle &obj)
+QDataStream &operator <<(QDataStream &out, const SrcItem &item)
 {
-    out << obj.id << obj.key << obj.value << obj.ext;
+    out << item.id << item.key << item.value << item.ext;
     return out;
 }
 
-QDataStream &operator>>(QDataStream &in, SrcEle &obj) {
-    in >> obj.id >> obj.key >> obj.value >> obj.ext;
+QDataStream &operator >>(QDataStream &in, SrcItem &item)
+{
+    in >> item.id >> item.key >> item.value >> item.ext;
     return in;
 }
 
-QDebug &operator<<(QDebug &out, const SrcEle &obj) {
-    out <<obj.id << obj.key << obj.value;
+QDataStream &operator>>(QDataStream &out, const SrcItem * const item)
+{
+    out << *item;
     return out;
 }
 
-bool SrcLessThan(const SrcEle &src1, const SrcEle &src2)
+QDataStream &operator<<(QDataStream &in, SrcItem * const item)
 {
-    return src1.key < src2.key;
+    in >> *item;
+    return in;
 }
 
 /**
@@ -154,6 +157,16 @@ void ParseResponseData(QString response, IMServerResponse &imres)
 QString PositionData(qint64 id, int x, int y)
 {
     return QString("%1|PS%2,%3").arg(QString::number(id, 36)).arg(x).arg(y);
+}
+
+void SrcCursor::setPageSize(int pageSize)
+{
+    this->pageSize = pageSize;
+}
+
+bool SrcCursor::hasNext()
+{
+    return this->_hasNext;
 }
 
 }

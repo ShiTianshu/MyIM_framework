@@ -2,6 +2,7 @@
 
 #include "windows.h"
 #include <winable.h>
+#include <QTextCodec>
 
 void SendUnicode(wchar_t data)
 {
@@ -24,6 +25,7 @@ void SendUnicode(wchar_t data)
 
 void SendString(QString str)
 {
+    QTextCodec *codec = QTextCodec::codecForName("UTF-8");
     wchar_t wcstr[1024];
     int len = str.toWCharArray(wcstr);
     wcstr[len] = 0;

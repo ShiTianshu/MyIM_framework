@@ -30,24 +30,40 @@
 
 namespace Global {
 
-// 数据源的基本数据结构。
-class SrcEle
+// 数据源的基本结构。
+class SrcItem
 {
 public:
-    uint id;
+    int id;
     QString key;
     QString value;
-    int ext;                // 用作频率或者其它标识，或是其它数据的id等。待定
-    // Override operator << and >>.
-    friend QDataStream &operator<<(QDataStream &out, const SrcEle &obj);
-    friend QDataStream &operator>>(QDataStream &in, SrcEle &obj);
+    QVariant ext;
 
-    friend QDebug &operator<<(QDebug &out, const SrcEle &obj);
+    friend QDataStream &operator<<(QDataStream &out, const SrcItem &item);
+    friend QDataStream &operator>>(QDataStream &in, SrcItem &item);
+    friend QDataStream &operator>>(QDataStream &out, const SrcItem * const item);
+    friend QDataStream &operator<<(QDataStream &in, SrcItem * const item);
+    friend QDebug &operator<<(QDebug &out, const SrcItem &item);
 };
 
+// 数据源的游标
+// src需求跟据自己的检索方式，实现自已的游标。
+// 其它的模块中，可以统一使用hasNext判断是否有数据。
+class SrcCursor
+{
+protected:
+    int pageSize;                               // 候选页大小
+    bool _hasNext;                              // 是否有下一页
+public:
+    void setPageSize(int pageSize);
+    bool hasNext();
+    virtual SrcItem nextOne() = 0;               // 获得一个
+    virtual QVector< SrcItem > nextPage() = 0;   // 获得一页
+};
+
+// 通用
 const QString & GetMyPath();
 void SetSettingsCodec(QSettings* settings, QByteArray codec="UTF-8");
-bool SrcLessThan(const SrcEle &src1, const SrcEle &src2);
 
 // 通信数据生成。
 QString KeyData(qint64 id, uint keycode, bool press,

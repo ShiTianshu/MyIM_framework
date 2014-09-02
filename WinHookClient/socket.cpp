@@ -84,6 +84,7 @@ bool SendKeyUp(int keycode, uint flags)
             Global::ParseResponseData(response, imres);
             if (!imres.commitString.isEmpty())
             {
+                qDebug() << imres.commitString;
                 SendString(imres.commitString);
             }
             return imres.accepted;
@@ -111,6 +112,7 @@ bool SendKeyDown(int keycode, uint flags)
             Global::ParseResponseData(response, imres);
             if (!imres.commitString.isEmpty())
             {
+                qDebug() << imres.commitString;
                 SendString(imres.commitString);
             }
             return imres.accepted;
