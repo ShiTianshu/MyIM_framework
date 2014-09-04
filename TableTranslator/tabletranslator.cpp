@@ -1,5 +1,7 @@
 #include "tabletranslator.h"
 #include "../MyBase/global.h"
+#include "../SimpleSrc/simplesrccursor.h"
+#include <QTime>
 
 TableTranslator* GetInstance()
 {
@@ -32,20 +34,23 @@ void TableTranslator::execute(InputContext *pic)
     {
         // 顶屏
         QString comp = pic->composition.right(1);
-        emit action("basics#push");
+        emit toAction("basics#push");
         pic->composition = comp;
     }
     pic->candidateList.clear();
-    QVector< Global::SrcEle > v;
-    emit find("tablesrc", pic->composition, &v);
-    if (!v.isEmpty())
+    Global::SrcCursor *pCursor = 0;
+    int time1 = QTime::currentTime().msecsSinceStartOfDay();
+    emit toFind("tablesrc", pic->composition, &pCursor);
+    int time2 = QTime::currentTime().msecsSinceStartOfDay();
+    qDebug() << "time used:" << time2 - time1;
+    if (pCursor->hasNext())
     {
-        pic->candidateList += v;
+        pic->candidateList += pCursor->nextPage();
     }
     if (pic->composition.length() >= this->maxCodeLen &&
             pic->candidateList.size() == 1)
     {
-        emit action("basics#push");
+        emit toAction("basics#push");
     }
 }
 

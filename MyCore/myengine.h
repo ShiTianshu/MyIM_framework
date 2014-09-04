@@ -62,12 +62,10 @@ private:
     void _addUiProc(IProc* iproc);
 
 public slots:
-    void toAction(QString actionId);
-    void findOne(QString srcId, QString key, Global::SrcEle *pe);
-    void find(QString srcId, QString key, QVector< Global::SrcEle > *pev);
+    void action(QString actionId);
+    void find(QString srcId, QString key, Global::SrcCursor **ppCursor);
     void remove(QString srcId, uint id);
-    void update(QString srcId, Global::SrcEle *pe);
-    void add(QString srcId, Global::SrcEle *pe);
+    void insert(QString srcId, QString key, QString value, QVariant ext);
 };
 
 #endif // MYENGINE_H

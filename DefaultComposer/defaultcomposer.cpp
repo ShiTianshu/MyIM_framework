@@ -81,7 +81,7 @@ void DefaultComposer::execute(InputContext *pic)
         {
             if (!pic->candidateList.isEmpty())
             {
-                emit action("basics#push");
+                emit toAction("basics#push");
             }
             pic->accepted = false;
             pic->key = 0;
@@ -98,13 +98,13 @@ void DefaultComposer::execute(InputContext *pic)
                 }
                 else
                 {
-                    emit action("basics#clear");
+                    emit toAction("basics#clear");
                 }
             }
             else
             {
                 qDebug() << "数字键1-9键选" << pic->key - Qt::Key_1;
-                emit action(QString("basics#select%1").arg(pic->key - Qt::Key_1));
+                emit toAction(QString("basics#select%1").arg(pic->key - Qt::Key_1));
             }
         }
         else if (pic->key == Qt::Key_Space)
@@ -116,7 +116,7 @@ void DefaultComposer::execute(InputContext *pic)
             }
             else
             {
-                emit action("basics#select0");
+                emit toAction("basics#select0");
             }
         }
         else if (pic->key == Qt::Key_Escape)
@@ -128,7 +128,7 @@ void DefaultComposer::execute(InputContext *pic)
             }
             else
             {
-                emit action("basics#clear");
+                emit toAction("basics#clear");
             }
         }
         else if (pic->key == Qt::Key_Backspace)
@@ -141,7 +141,7 @@ void DefaultComposer::execute(InputContext *pic)
             }
             else
             {
-                emit action("basics#back");
+                emit toAction("basics#back");
             }
         }
         else if (pic->key == Qt::Key_Return)
@@ -153,7 +153,7 @@ void DefaultComposer::execute(InputContext *pic)
             }
             else
             {
-                emit action("basics#sendcomp");
+                emit toAction("basics#sendcomp");
             }
         }
         else

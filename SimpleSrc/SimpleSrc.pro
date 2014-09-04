@@ -13,10 +13,12 @@ DEFINES += SIMPLESRC_LIBRARY
 
 LIBS += -L $$(MYIM_HOME)/lib -lMyBase
 
-SOURCES += simplesrc.cpp
+SOURCES += simplesrc.cpp \
+    simplesrccursor.cpp
 
 HEADERS += simplesrc.h\
-        simplesrc_global.h
+        simplesrc_global.h \
+    simplesrccursor.h
 
 DESTDIR = $$(MYIM_HOME)/mod
 

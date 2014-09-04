@@ -61,6 +61,12 @@ QDataStream &operator<<(QDataStream &in, SrcItem * const item)
     return in;
 }
 
+QDebug &operator<<(QDebug &out, const SrcItem &item)
+{
+    out << item.id << item.key << item.value << item.ext;
+    return out;
+}
+
 /**
  * @brief KeyData   生成按键的通信字符串。
  *                  功能键的标志位，在其自身按下时，可任意传入。

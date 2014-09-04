@@ -40,23 +40,17 @@ void MyEngine::initialize(const QMap<QString, QVariant> &envs)
         it.value()->initialize(envs);
         qDebug() << QString("%1连接信号槽").arg(it.value()->getFullName());
         // 连接信号和槽
-        connect(it.value(), SIGNAL(action(QString)),
-                this, SLOT(toAction(QString)));
+        connect(it.value(), SIGNAL(toAction(QString)),
+                this, SLOT(action(QString)));
 
-        connect(it.value(), SIGNAL(find(QString,QString,QVector<Global::SrcEle>*)),
-                this, SLOT(find(QString,QString,QVector<Global::SrcEle>*)));
+        connect(it.value(), SIGNAL(toFind(QString,QString,Global::SrcCursor**)),
+                this, SLOT(find(QString,QString,Global::SrcCursor**)));
 
-        connect(it.value(), SIGNAL(findOne(QString,QString,Global::SrcEle*)),
-                this, SLOT(findOne(QString,QString,Global::SrcEle*)));
+        connect(it.value(), SIGNAL(toInsert(QString,QString,QString,QVariant)),
+                this, SLOT(insert(QString,QString,QString,QVariant)));
 
-        connect(it.value(), SIGNAL(remove(QString,uint)),
+        connect(it.value(), SIGNAL(toRemove(QString,uint)),
                 this, SLOT(remove(QString,uint)));
-
-        connect(it.value(), SIGNAL(add(QString,Global::SrcEle*)),
-                this, SLOT(add(QString,Global::SrcEle*)));
-
-        connect(it.value(), SIGNAL(update(QString,Global::SrcEle*)),
-                this, SLOT(update(QString,Global::SrcEle*)));
     }
 }
 
@@ -140,37 +134,7 @@ void MyEngine::addUiProcList(QStringList procList)
     }
 }
 
-void MyEngine::findOne(QString srcId, QString key, Global::SrcEle *pe)
-{
-    ISrc* ps = this->_getSrc(srcId);
-    ps->findOne(key, pe);
-}
-
-void MyEngine::find(QString srcId, QString key, QVector<Global::SrcEle> *pev)
-{
-    ISrc* ps = this->_getSrc(srcId);
-    ps->find(key, pev);
-}
-
-void MyEngine::remove(QString srcId, uint id)
-{
-    ISrc* ps = this->_getSrc(srcId);
-    ps->remove(id);
-}
-
-void MyEngine::update(QString srcId, Global::SrcEle *pe)
-{
-    ISrc* ps = this->_getSrc(srcId);
-    ps->update(pe);
-}
-
-void MyEngine::add(QString srcId, Global::SrcEle *pe)
-{
-    ISrc* ps = this->_getSrc(srcId);
-    ps->add(pe);
-}
-
-void MyEngine::toAction(QString actionId)
+void MyEngine::action(QString actionId)
 {
     InputContext* pic = this->core->getCurrCtx();
 
@@ -194,6 +158,24 @@ void MyEngine::toAction(QString actionId)
         IAct* pa = this->_getAct(actionId);
         pa->execute(pic);
     }
+}
+
+void MyEngine::find(QString srcId, QString key, Global::SrcCursor **ppCursor)
+{
+    ISrc* ps = this->_getSrc(srcId);
+    ps->find(key, ppCursor);
+}
+
+void MyEngine::remove(QString srcId, uint id)
+{
+    ISrc* ps = this->_getSrc(srcId);
+    ps->remove(id);
+}
+
+void MyEngine::insert(QString srcId, QString key, QString value, QVariant ext)
+{
+    ISrc* ps = this->_getSrc(srcId);
+    ps->insert(key, value, ext);
 }
 
 
