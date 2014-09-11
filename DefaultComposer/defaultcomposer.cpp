@@ -75,8 +75,6 @@ void DefaultComposer::execute(InputContext *pic)
                  pic->key == Qt::Key_Plus ||
                  pic->key == Qt::Key_Backslash ||
                  pic->key == Qt::Key_Slash ||
-                 pic->key == Qt::Key_BracketLeft ||
-                 pic->key == Qt::Key_BraceRight ||
                  pic->key == Qt::Key_QuoteLeft)
         {
             if (!pic->candidateList.isEmpty())
@@ -85,6 +83,23 @@ void DefaultComposer::execute(InputContext *pic)
             }
             pic->accepted = false;
             pic->key = 0;
+        }
+        else if (pic->key == Qt::Key_BracketLeft ||
+                 pic->key == Qt::Key_BraceRight)
+        {
+            if (!pic->composition.isEmpty())
+            {
+                if (pic->key == Qt::Key_BracketLeft)
+                {
+                    emit toAction("basics#pageprev");
+                }
+                else
+                {
+                    emit toAction("basics#pagenext");
+                }
+                pic->accepted = true;
+                pic->key = 0;
+            }
         }
         else if (pic->key >= Qt::Key_0 && pic->key <= Qt::Key_9)
         {

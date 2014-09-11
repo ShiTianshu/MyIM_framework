@@ -88,6 +88,20 @@ void Basics::executeGroup(QString arg, InputContext *pic)
         pic->commitString = pic->composition;
         pic->resetInfos();
     }
+    else if (arg == "pageprev")
+    {
+        if (pic->pageIndex > 0)
+        {
+            --pic->pageIndex;
+        }
+    }
+    else if (arg == "pagenext")
+    {
+        if (pic->pageIndex * 5 + 5 < pic->candidateList.size())
+        {
+            ++pic->pageIndex;
+        }
+    }
     else
     {
         throw QString ("basics不支持参数%1").arg(arg);

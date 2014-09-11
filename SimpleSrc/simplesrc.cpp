@@ -136,7 +136,20 @@ void SimpleSrc::find(QString key,  Global::SrcCursor **ppCursor)
 {
     qDebug() << "find invoked";
     *ppCursor = &(this->cursor);
-    QHash< QString, quint32 >::iterator it = this->indexs.find(key);
+    QHash< QString, quint32 >::iterator it;
+    do
+    {
+        it = this->indexs.find(key);
+        if (it == this->indexs.end())
+        {
+            key = key.left(key.length() - 1);
+        }
+        else
+        {
+            break;
+        }
+    }while (!key.isEmpty());
+
     if (it != this->indexs.end())
     {
         this->cursor.setKey(key);

@@ -28,7 +28,7 @@ public:
     QVector< Global::SrcItem > candidateList;  // 候选列表。
     QVector< Global::SrcItem > originalMatched;// 原匹配，用于整句
     QVector< Global::SrcItem > currentMatched; // 当前匹配，用于整句
-    uint pageIndex;         // 候选页码。
+    int pageIndex;         // 候选页码。
     QString editText;       // 嵌入编码。
     QString commitString;   // 上屏内容。
     uint compIndex;         // 编码光标，用于整句。

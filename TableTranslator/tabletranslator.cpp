@@ -39,13 +39,17 @@ void TableTranslator::execute(InputContext *pic)
     }
     pic->candidateList.clear();
     Global::SrcCursor *pCursor = 0;
-    int time1 = QTime::currentTime().msecsSinceStartOfDay();
     emit toFind("tablesrc", pic->composition, &pCursor);
-    int time2 = QTime::currentTime().msecsSinceStartOfDay();
-    qDebug() << "time used:" << time2 - time1;
-    if (pCursor->hasNext())
+    for (int i = 0; i < 10; ++i)
     {
-        pic->candidateList += pCursor->nextPage();
+        if (pCursor->hasNext())
+        {
+            pic->candidateList += pCursor->nextPage();
+        }
+        else
+        {
+            break;
+        }
     }
     if (pic->composition.length() >= this->maxCodeLen &&
             pic->candidateList.size() == 1)

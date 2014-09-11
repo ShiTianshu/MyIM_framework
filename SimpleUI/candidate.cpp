@@ -47,6 +47,7 @@ void Candidate::paintEvent(QPaintEvent *)
         for (int i = 0; i < this->cands.size(); ++i)
         {
             int t = metrics.width(this->cands.at(i));
+            t += metrics.width(this->tips.at(i));
             width = width > t ? width : t;
         }
         width = width > this->minWidth ? width : this->minWidth;
@@ -80,14 +81,26 @@ void Candidate::paintEvent(QPaintEvent *)
                                QStaticText(pic->composition));
         painter.setPen(this->fontPen);
         // 候选
-        painter.setPen(this->currentPen);
+
         int left = 2 * this->borderPadding + this->shadowWidth;
         int top = this->borderPadding + this->shadowWidth;
         for (int i = 0; i < this->cands.size(); ++i)
         {
+            if (!i)
+            {
+                painter.setPen(this->currentPen);
+            }
+            else
+            {
+                painter.setPen(this->fontPen);
+            }
             top += lineSpace + fontHeight;
             painter.drawStaticText(left, top, QStaticText(this->cands.at(i)));
-            if (!i)painter.setPen(this->fontPen);
+            painter.setPen(this->tipPen);
+            painter.drawStaticText(left+metrics.width(this->cands.at(i)),
+                                   top, QStaticText(this->tips.at(i)));
+
         }
+
     }
 }

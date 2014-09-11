@@ -53,6 +53,9 @@ void SimpleUI::initialize(const QMap<QString, QVariant> &envs)
     QString compColor = this->getIdConfig(envs, "compcolor").toString();
     pcand->compPen = QPen(QColor(compColor));
 
+    QString tipColor = this->getIdConfig(envs, "tipcolor").toString();
+    pcand->tipPen = QPen(QColor(tipColor));
+
     // 读取字体信息
     int fontSize = this->getIdConfig(envs, "fontsize").toInt();
     QString fontFamily = this->getIdConfig(envs, "fontfamily").toString();
@@ -84,9 +87,18 @@ void SimpleUI::execute(InputContext *pic)
         {
             qDebug() << "add cand";
             pcand->cands.append(QString("%1.%2").arg(i+1).arg(pic->candidateList.at(i).value));
+            // 添加编码提示。
+            QString curr = pic->candidateList.at(i).value;
+            QString comp = pic->composition;
+            if (comp.length() >= curr.length())
+            {
+                pcand->tips.append("");
+            }
+            else
+            {
+                pcand->tips.append(QString("  [%1]").arg(curr.mid(comp.length())));
+            }
         }
-//        pcand->cands.append("1.测试内容很长的时候，效果怎么样。我很长啊我很长。");
-//        pcand->cands.append("2.你好");
         qDebug() << pcand->cands;
         if (this->pcand->isVisible())
         {
