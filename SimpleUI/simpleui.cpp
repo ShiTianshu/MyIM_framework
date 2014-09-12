@@ -80,10 +80,12 @@ void SimpleUI::execute(InputContext *pic)
     if (!pic->composition.isEmpty())
     {
         qDebug() << "page index" << pic->pageIndex;
-        uint start = pic->pageIndex * 5;
+        int start = pic->pageIndex * 5;
+        int end = pic->pageIndex * 5 + 5;
+        end = end > pic->candidateList.size() ? pic->candidateList.size() : end;
         pcand->cands.clear();
         qDebug() << "start:" << start << "candsize:" << pic->candidateList.size();
-        for (int i = start; i < pic->candidateList.size(); ++i)
+        for (int i = start; i < end; ++i)
         {
             qDebug() << "add cand";
             pcand->cands.append(QString("%1.%2").arg(i+1).arg(pic->candidateList.at(i).value));

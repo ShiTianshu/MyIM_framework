@@ -18,7 +18,8 @@ public:
     ISrc();
     virtual ~ISrc();
 
-    virtual void find(QString key, Global::SrcCursor **ppCursor) = 0;
+    virtual void find(QString key) = 0;
+    virtual void srcCursor(Global::SrcCursor **ppcurr) = 0;
     virtual void remove(uint id) = 0;
     virtual void insert(QString key, QString value, QVariant ext) = 0;
 };

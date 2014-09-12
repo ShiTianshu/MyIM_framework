@@ -8,7 +8,7 @@
 
 int main(int argc, char *argv[])
 {
-    QTextCodec::setCodecForLocale(QTextCodec::codecForName("UTF-8"));
+    //QTextCodec::setCodecForLocale(QTextCodec::codecForName("UTF-8"));
     qDebug() << "server start";
     QApplication a(argc, argv);
     MyServer server;

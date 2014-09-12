@@ -47,6 +47,7 @@ void SimpleSrc::initialize(const QMap<QString, QVariant> &envs)
         binFile.open(QFile::ReadOnly);
         this->_loadBinFile(&binFile);
         binFile.close();
+        qDebug() << "bin读取完成";
     }
     else
     {
@@ -132,10 +133,9 @@ void SimpleSrc::_createIndexs()
     }
 }
 
-void SimpleSrc::find(QString key,  Global::SrcCursor **ppCursor)
+void SimpleSrc::find(QString key)
 {
     qDebug() << "find invoked";
-    *ppCursor = &(this->cursor);
     QHash< QString, quint32 >::iterator it;
     do
     {
@@ -174,4 +174,15 @@ void SimpleSrc::insert(QString key, QString value, QVariant ext)
     QFile binFile(QString("%1/data/%2.bin").arg(Global::GetMyPath()).arg(fileName));
     this->_createBinFile(&binFile);
     binFile.close();
+}
+
+//+---------------------------------------------------------------------
+//
+// 获得当前的src游标
+//
+//----------------------------------------------------------------------
+
+void SimpleSrc::srcCursor(Global::SrcCursor **ppcurr)
+{
+    *ppcurr = &(this->cursor);
 }

@@ -36,7 +36,8 @@ protected:
     QVariant getNameConfig(const QMap< QString, QVariant > &envs, QString key);
 signals:
     void toAction(QString actionId);
-    void toFind(QString srcId, QString key, Global::SrcCursor **ppCursor);
+    void toFind(QString srcId, QString key);
+    void getSrcCursor(QString srcId, Global::SrcCursor **ppcur);
     void toRemove(QString srcId, uint id);
     void toInsert(QString srcId, QString key, QString value, QVariant ext);
 };

@@ -18,9 +18,9 @@ public:
     virtual void initialize(const QMap< QString, QVariant > &envs);
 
 private:
-    QVector< Global::SrcItem > words;    // 词条
+    QVector< Global::SrcItem > words;   // 词条
     QHash < QString, quint32 > indexs;  // 索引 %10000为词条数，/10000为下标
-    SimpleSrcCursor cursor;        // 保有一个指针。
+    SimpleSrcCursor cursor;             // 保有一个指针。
 
 private:
     virtual void _loadTxtFile(QFile *pf);
@@ -32,9 +32,10 @@ private:
 
     // ISrc interface
 public:
-    virtual void find(QString key, Global::SrcCursor **ppCursor);
+    virtual void find(QString key);
     virtual void remove(uint);
     virtual void insert(QString key, QString value, QVariant ext);
+    virtual void srcCursor(Global::SrcCursor **ppcurr);
 };
 
 extern "C" SIMPLESRCSHARED_EXPORT SimpleSrc* GetInstance();

@@ -39,18 +39,19 @@ void TableTranslator::execute(InputContext *pic)
     }
     pic->candidateList.clear();
     Global::SrcCursor *pCursor = 0;
-    emit toFind("tablesrc", pic->composition, &pCursor);
-    for (int i = 0; i < 10; ++i)
+
+    emit toFind("tablesrc", pic->composition);
+    emit getSrcCursor("tablesrc", &pCursor);
+
+    // 获得第一页的候选。
+    if (pCursor->hasNext())
     {
-        if (pCursor->hasNext())
-        {
-            pic->candidateList += pCursor->nextPage();
-        }
-        else
-        {
-            break;
-        }
+        pic->candidateList += pCursor->nextPage();
+        pic->pageIndex = 0;
     }
+
+    qDebug() << pic->candidateList;
+
     if (pic->composition.length() >= this->maxCodeLen &&
             pic->candidateList.size() == 1)
     {

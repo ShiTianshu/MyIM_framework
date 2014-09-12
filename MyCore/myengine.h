@@ -63,9 +63,10 @@ private:
 
 public slots:
     void action(QString actionId);
-    void find(QString srcId, QString key, Global::SrcCursor **ppCursor);
+    void find(QString srcId, QString key);
     void remove(QString srcId, uint id);
     void insert(QString srcId, QString key, QString value, QVariant ext);
+    void srcCursor(QString srcId, Global::SrcCursor **ppCursor);
 };
 
 #endif // MYENGINE_H

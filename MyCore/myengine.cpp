@@ -51,6 +51,8 @@ void MyEngine::initialize(const QMap<QString, QVariant> &envs)
 
         connect(it.value(), SIGNAL(toRemove(QString,uint)),
                 this, SLOT(remove(QString,uint)));
+        connect(it.value(), SIGNAL(getSrcCursor(QString,Global::SrcCursor**)),
+                this, SLOT(srcCursor(QString,Global::SrcCursor**)));
     }
 }
 
@@ -160,10 +162,10 @@ void MyEngine::action(QString actionId)
     }
 }
 
-void MyEngine::find(QString srcId, QString key, Global::SrcCursor **ppCursor)
+void MyEngine::find(QString srcId, QString key)
 {
     ISrc* ps = this->_getSrc(srcId);
-    ps->find(key, ppCursor);
+    ps->find(key);
 }
 
 void MyEngine::remove(QString srcId, uint id)
@@ -176,6 +178,12 @@ void MyEngine::insert(QString srcId, QString key, QString value, QVariant ext)
 {
     ISrc* ps = this->_getSrc(srcId);
     ps->insert(key, value, ext);
+}
+
+void MyEngine::srcCursor(QString srcId, Global::SrcCursor **ppCursor)
+{
+    ISrc* ps = this->_getSrc(srcId);
+    ps->srcCursor(ppCursor);
 }
 
 
