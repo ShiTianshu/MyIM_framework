@@ -2,6 +2,7 @@
 #define CARET_H
 
 #include <windows.h>
+#include <QDebug>
 
 inline void FillPos(POINT &point)
 {
@@ -12,8 +13,13 @@ inline void FillPos(POINT &point)
     {
         point.x=pg.rcCaret.right;
         point.y=pg.rcCaret.bottom;
-        ::ClientToScreen(pg.hwndCaret,&point);
     }
+    else
+    {
+        point.x = 0;
+        point.y = 0;
+    }
+    ::ClientToScreen(::GetForegroundWindow(),&point);
 }
 
 #endif // CARET_H

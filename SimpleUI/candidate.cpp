@@ -63,14 +63,14 @@ void Candidate::paintEvent(QPaintEvent *)
                             this->borderRadius, this->borderRadius);
         painter.fillPath(path, this->backgroundBrush);
         // 画阴影
-        for (int i = 1; i < this->shadowWidth; ++i)
+        for (int i = 1; i <= this->shadowWidth; ++i)
         {
-            this->shadowColor.setAlpha(25 / i);
+            this->shadowColor.setAlpha(60 / i);
             path.addRoundedRect(this->shadowWidth - i, this->shadowWidth - i,
                                 this->width() - 2 * (this->shadowWidth - i),
                                 this->height()- 2 * (this->shadowWidth - i),
-                                this->borderRadius, this->borderRadius);
-            painter.setPen(QPen(QBrush(this->shadowColor), 2));
+                                this->borderRadius + i, this->borderRadius + i);
+            painter.setPen(QPen(QBrush(this->shadowColor), 1));
             painter.drawPath(path);
         }
         // 画编码

@@ -51,7 +51,7 @@ public:
 // 其它的模块中，可以统一使用hasNext判断是否有数据。
 class SrcCursor
 {
-protected:
+public:
     int pageSize;                               // 候选页大小
     bool _hasNext;                              // 是否有下一页
 public:

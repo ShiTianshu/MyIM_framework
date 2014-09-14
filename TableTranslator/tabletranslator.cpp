@@ -1,6 +1,5 @@
 #include "tabletranslator.h"
 #include "../MyBase/global.h"
-#include "../SimpleSrc/simplesrccursor.h"
 #include <QTime>
 
 TableTranslator* GetInstance()
@@ -30,19 +29,24 @@ void TableTranslator::execute(InputContext *pic)
         // 跳过模块
         return;
     }
+    if (!pic->key)
+    {
+        return;
+    }
     if (pic->composition.length() > this->maxCodeLen)
     {
         // 顶屏
         QString comp = pic->composition.right(1);
-        emit toAction("basics#push");
+        emit callAction("basics#push");
         pic->composition = comp;
     }
     pic->candidateList.clear();
     Global::SrcCursor *pCursor = 0;
 
-    emit toFind("tablesrc", pic->composition);
-    emit getSrcCursor("tablesrc", &pCursor);
+    emit srcFind("tablesrc", pic->composition);
+    emit srcCursor("tablesrc", &pCursor);
 
+    qDebug() << "has next: " << pCursor->hasNext();
     // 获得第一页的候选。
     if (pCursor->hasNext())
     {
@@ -55,7 +59,7 @@ void TableTranslator::execute(InputContext *pic)
     if (pic->composition.length() >= this->maxCodeLen &&
             pic->candidateList.size() == 1)
     {
-        emit toAction("basics#push");
+        emit callAction("basics#push");
     }
 }
 

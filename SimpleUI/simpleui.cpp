@@ -85,12 +85,12 @@ void SimpleUI::execute(InputContext *pic)
         end = end > pic->candidateList.size() ? pic->candidateList.size() : end;
         pcand->cands.clear();
         qDebug() << "start:" << start << "candsize:" << pic->candidateList.size();
+        pcand->tips.clear();
         for (int i = start; i < end; ++i)
         {
-            qDebug() << "add cand";
-            pcand->cands.append(QString("%1.%2").arg(i+1).arg(pic->candidateList.at(i).value));
+            pcand->cands.append(QString("%1.%2").arg(i+1-start).arg(pic->candidateList.at(i).value));
             // 添加编码提示。
-            QString curr = pic->candidateList.at(i).value;
+            QString curr = pic->candidateList.at(i).key;
             QString comp = pic->composition;
             if (comp.length() >= curr.length())
             {
@@ -104,7 +104,7 @@ void SimpleUI::execute(InputContext *pic)
         qDebug() << pcand->cands;
         if (this->pcand->isVisible())
         {
-            this->pcand->update();
+            this->pcand->repaint();
         }
         else
         {

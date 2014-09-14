@@ -1,0 +1,12 @@
+#ifndef TABLESRC_GLOBAL_H
+#define TABLESRC_GLOBAL_H
+
+#include <QtCore/qglobal.h>
+
+#if defined(TABLESRC_LIBRARY)
+#  define TABLESRCSHARED_EXPORT Q_DECL_EXPORT
+#else
+#  define TABLESRCSHARED_EXPORT Q_DECL_IMPORT
+#endif
+
+#endif // TABLESRC_GLOBAL_H

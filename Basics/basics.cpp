@@ -97,10 +97,22 @@ void Basics::executeGroup(QString arg, InputContext *pic)
     }
     else if (arg == "pagenext")
     {
-        if (pic->pageIndex * 5 + 5 < pic->candidateList.size())
+        if (pic->pageIndex * 5 + 5 == pic->candidateList.size())
         {
-            ++pic->pageIndex;
+            Global::SrcCursor *pcur;
+            emit srcCursor("tablesrc", &pcur);
+            qDebug() <<"page next:"<< pcur << pcur->hasNext();
+            if (pcur->hasNext())
+            {
+                pic->candidateList += pcur->nextPage();
+                pic->pageIndex ++;
+            }
         }
+        else if (pic->pageIndex* 5 + 5 < pic->candidateList.size())
+        {
+            pic->pageIndex ++;
+        }
+
     }
     else
     {

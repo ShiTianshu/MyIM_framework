@@ -40,18 +40,15 @@ void MyEngine::initialize(const QMap<QString, QVariant> &envs)
         it.value()->initialize(envs);
         qDebug() << QString("%1连接信号槽").arg(it.value()->getFullName());
         // 连接信号和槽
-        connect(it.value(), SIGNAL(toAction(QString)),
+        connect(it.value(), SIGNAL(callAction(QString)),
                 this, SLOT(action(QString)));
-
-        connect(it.value(), SIGNAL(toFind(QString,QString,Global::SrcCursor**)),
-                this, SLOT(find(QString,QString,Global::SrcCursor**)));
-
-        connect(it.value(), SIGNAL(toInsert(QString,QString,QString,QVariant)),
+        connect(it.value(), SIGNAL(srcFind(QString,QString)),
+                this, SLOT(find(QString,QString)));
+        connect(it.value(), SIGNAL(srcInsert(QString,QString,QString,QVariant)),
                 this, SLOT(insert(QString,QString,QString,QVariant)));
-
-        connect(it.value(), SIGNAL(toRemove(QString,uint)),
+        connect(it.value(), SIGNAL(srcRemove(QString,uint)),
                 this, SLOT(remove(QString,uint)));
-        connect(it.value(), SIGNAL(getSrcCursor(QString,Global::SrcCursor**)),
+        connect(it.value(), SIGNAL(srcCursor(QString,Global::SrcCursor**)),
                 this, SLOT(srcCursor(QString,Global::SrcCursor**)));
     }
 }

@@ -4,10 +4,10 @@ SUBDIRS += \
     MyBase \
     MyCore \
     MyServer \
-    SimpleSrc \
     WinHookClient \
     SimpleUI \
     DefaultComposer \
     WinKeyCodeConverter \
     TableTranslator \
-    Basics
+    Basics \
+    TableSrc
