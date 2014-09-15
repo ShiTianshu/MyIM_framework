@@ -73,14 +73,7 @@ void TableSrc::find(QString key)
 {
     qDebug() << "start find";
 
-    int result = this->_binSearch(key, false);
-
-    if (result == -1)
-    {
-        result = this->_binSearch(key, true);
-    }
-    // 扩展
-    qDebug() << "extending...";
+    int result = this->_binSearch(key);
 
     if (result == -1)
     {
@@ -157,7 +150,7 @@ void TableSrc::_loadTxtFile(QFile *pf)
  * @param key
  * @return 返回编码，以该编码为开头的，最长的编码的位置。
  */
-int TableSrc::_binSearch(QString key, bool ext)
+int TableSrc::_binSearch(QString key)
 {
     qDebug() << "binsearch";
     int len = key.length();
@@ -165,24 +158,17 @@ int TableSrc::_binSearch(QString key, bool ext)
     int l = 0;
     int h = this->datas.length();
     int m = 0;
+    QStringRef _key = key.midRef(0);
     while (l < h)
     {
         m = (h + l) / 2;
-        QString t;
-        if (!ext)
-        {
-            t = this->datas.at(m).key;
-        }
-        else
-        {
-            t = this->datas.at(m).key.left(len);
-        }
+        QStringRef t = this->datas.at(m).key.leftRef(len);
 
-        if (t == key)
+        if (t == _key)
         {
             break;
         }
-        else if (t > key)
+        else if (t > _key)
         {
             h = m;
         }
@@ -201,7 +187,7 @@ int TableSrc::_binSearch(QString key, bool ext)
         // 向回递推，找到与之相同编码的第一条。
         while (m > 0)
         {
-            if (this->datas.at(m - 1).key.leftRef(len) == key)
+            if (this->datas.at(m - 1).key.leftRef(len) == _key)
             {
                 --m;
             }

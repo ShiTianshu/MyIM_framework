@@ -34,7 +34,7 @@ private:
     void _loadBinFile(QFile *pf);
     void _createBinFile(QFile *pf);
     void _loadTxtFile(QFile *pf);
-    int _binSearch(QString key, bool ext);
+    int _binSearch(QString key);
 };
 
 extern "C" TABLESRCSHARED_EXPORT TableSrc* GetInstance();
